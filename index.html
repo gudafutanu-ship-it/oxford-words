@@ -11,18 +11,20 @@
       --card: #ffffff;
       --text: #1f2937;
       --muted: #667085;
-      --line: #cfd6e4;
+      --line: #d6dce8;
       --blue: #2f6fed;
       --green: #10b981;
       --red: #ef4444;
       --orange: #f59e0b;
-      --soft-blue: #eef4ff;
-      --soft-gray: #f7f8fb;
+      --gray: #64748b;
+      --soft: #f8fafc;
+      --shadow: 0 6px 18px rgba(0,0,0,0.06);
     }
 
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
     html, body {
@@ -33,65 +35,48 @@
       font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
     }
 
-    body {
-      padding: 8px;
-    }
+    body { padding: 8px; }
 
     .wrap {
       width: 100%;
-      max-width: 100%;
+      max-width: 860px;
       margin: 0 auto;
     }
 
     .card {
       background: var(--card);
       border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      padding: 12px;
+      box-shadow: var(--shadow);
       margin-bottom: 10px;
     }
 
     h1 {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       font-size: 22px;
-      line-height: 1.35;
-    }
-
-    h2 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      line-height: 1.35;
-    }
-
-    p {
-      margin: 0 0 12px;
-      line-height: 1.7;
-      font-size: 14px;
+      line-height: 1.3;
     }
 
     .top-grid {
       display: grid;
-      grid-template-columns: 0.72fr 0.95fr 1.33fr;
+      grid-template-columns: 82px 1fr;
       gap: 8px;
-      align-items: start;
-    }
-
-    .field {
-      min-width: 0;
+      align-items: end;
+      position: relative;
+      z-index: 5;
     }
 
     .field label {
       display: block;
       font-weight: 700;
       margin-bottom: 6px;
-      font-size: 13px;
-      line-height: 1.3;
+      font-size: 12px;
     }
 
-    .field input,
-    .field select {
+    .field select,
+    .alpha-trigger {
       width: 100%;
-      height: 48px;
+      height: 46px;
       padding: 10px 12px;
       border: 1px solid var(--line);
       border-radius: 14px;
@@ -101,40 +86,125 @@
       outline: none;
     }
 
-    .field input:focus,
-    .field select:focus {
+    .field select:focus,
+    .alpha-trigger:focus,
+    .alpha-trigger.open {
       border-color: var(--blue);
       box-shadow: 0 0 0 3px rgba(47,111,237,0.12);
     }
 
-    .char-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .alpha-wrap {
+      position: relative;
     }
 
-    .char-hint-inline {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.3;
+    .alpha-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .alpha-value {
       white-space: nowrap;
-      padding-left: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .alpha-arrow {
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: 8px;
+      flex: 0 0 auto;
+    }
+
+    .alpha-panel {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 14px 28px rgba(15,23,42,0.16);
+      padding: 10px;
+    }
+
+    .alpha-panel.open { display: block; }
+
+    .alpha-help {
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .alpha-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      touch-action: none;
+    }
+
+    .alpha-item {
+      min-height: 38px;
+      border-radius: 12px;
+      border: 1px solid #dde4f0;
+      background: #fff;
+      color: #334155;
+      font-size: 15px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .alpha-item.preview {
+      background: #e8f0ff;
+      color: #173f9d;
+      border-color: #a8c0ff;
+    }
+
+    .alpha-item.active {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+
+    .alpha-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .mini-btn {
+      flex: 1;
+      min-height: 38px;
+      border: none;
+      border-radius: 12px;
+      background: #eef2ff;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
     .btns {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
     button {
       border: none;
       border-radius: 14px;
-      min-height: 48px;
-      padding: 12px 10px;
+      min-height: 46px;
+      padding: 10px;
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 800;
       color: #fff;
       cursor: pointer;
     }
@@ -143,165 +213,165 @@
     .secondary { background: var(--green); }
     .danger { background: var(--red); }
     .warning { background: var(--orange); }
+    .ghost { background: var(--gray); }
 
     button:disabled {
-      background: #c7cdd8;
-      color: #fff;
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
-    .footer-note {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.55;
-      margin-top: 10px;
-    }
+    .study-area { display: none; }
 
-    .study-area {
-      display: none;
-    }
-
-    .study-shell {
-      display: grid;
-      grid-template-columns: 108px 1fr 88px;
-      gap: 10px;
-      align-items: stretch;
-    }
-
-    .summary-panel {
-      background: var(--soft-blue);
-      border-radius: 14px;
-      padding: 10px;
+    .top-bar {
       display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
     }
 
-    .summary-title {
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: #1f2937;
-    }
-
-    .summary-count {
-      font-size: 24px;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
       font-weight: 800;
-      color: var(--blue);
-      line-height: 1.2;
-    }
-
-    .summary-sub {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.45;
-      margin-top: 6px;
-    }
-
-    .study-main {
-      min-width: 0;
+      background: #eef2ff;
+      color: #334155;
     }
 
     .progress {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #1f2937;
+      font-size: 15px;
+      font-weight: 800;
     }
 
-    .mode-badge {
-      display: inline-block;
-      margin-bottom: 10px;
-      padding: 4px 10px;
-      border-radius: 999px;
+    .flash-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .flash-btn {
+      min-height: 42px;
+      border-radius: 12px;
+      background: #e9eef8;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .flash-btn.active {
+      background: var(--orange);
+      color: #fff;
+    }
+
+    .flash-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      min-height: 42px;
+      padding: 0 10px;
+      background: #fff7e8;
+      border: 1px solid #ffd58b;
+      color: #8a5a00;
       font-size: 12px;
-      font-weight: 700;
-      background: #eef2ff;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .study-main-grid {
+      display: grid;
+      grid-template-columns: 1fr 86px;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .word-box {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+      border: 1px solid #e5ebf7;
+      border-radius: 18px;
+      min-height: 260px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .word {
+      font-size: clamp(30px, 6vw, 48px);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      word-break: break-word;
+      color: #0f172a;
+    }
+
+    .meaning {
+      font-size: clamp(21px, 4.2vw, 30px);
+      line-height: 1.45;
+      word-break: break-word;
       color: #374151;
+    }
+
+    .meta {
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .next-wrap button {
+      height: 100%;
+      min-height: 260px;
+      border-radius: 18px;
+      font-size: 18px;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 0.1em;
+    }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .bottom-row button {
+      min-height: 54px;
+      font-size: 15px;
     }
 
     .completed {
       display: none;
-      font-size: 18px;
-      font-weight: 800;
-      color: #16a34a;
-      margin-bottom: 10px;
-      line-height: 1.4;
-    }
-
-    .word {
-      font-size: 34px;
-      font-weight: 800;
-      line-height: 1.3;
-      margin-bottom: 12px;
-      color: #111827;
-      word-break: break-word;
-    }
-
-    .meaning {
-      font-size: 22px;
-      line-height: 1.5;
-      margin-bottom: 12px;
-      color: #374151;
-      word-break: break-word;
-    }
-
-    .meta {
-      font-size: 13px;
-      color: #555;
-      line-height: 1.7;
-    }
-
-    .study-side-buttons {
-      display: grid;
-      grid-template-rows: 1fr 1fr 1fr;
-      gap: 10px;
-    }
-
-    .study-side-buttons button {
-      min-height: 78px;
-      height: 100%;
-      font-size: 16px;
-      border-radius: 16px;
-    }
-
-    .review-btn {
-      background: var(--red);
-    }
-
-    .review-summary {
       margin-top: 8px;
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.5;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.6;
+      text-align: center;
     }
 
-    @media (max-width: 430px) {
-      .top-grid {
-        grid-template-columns: 0.72fr 0.95fr 1.33fr;
-      }
-
-      .study-shell {
-        grid-template-columns: 100px 1fr 82px;
-        gap: 8px;
-      }
-
-      .word {
-        font-size: 31px;
-      }
-
-      .meaning {
-        font-size: 20px;
-      }
-
-      .summary-count {
-        font-size: 22px;
-      }
-
-      .study-side-buttons button {
-        min-height: 74px;
-        font-size: 15px;
-      }
+    @media (max-width: 560px) {
+      body { padding: 6px; }
+      .card { padding: 10px; }
+      .top-grid { grid-template-columns: 72px 1fr; }
+      .alpha-list { grid-template-columns: repeat(4, 1fr); }
+      .study-main-grid { grid-template-columns: 1fr 72px; }
+      .word-box { min-height: 220px; padding: 14px 10px; }
+      .next-wrap button { min-height: 220px; font-size: 17px; }
+      .bottom-row { grid-template-columns: 1fr 1fr 1.25fr; }
+      .bottom-row button { min-height: 50px; }
     }
   </style>
 </head>
@@ -309,11 +379,6 @@
   <div class="wrap">
     <div class="card">
       <h1>Oxford5000 学習ツール</h1>
-      <p>
-        ランク・文字数・先頭文字で絞り込み、今日学習する単語だけを表示します。<br>
-        途中でやめても「つづきから」で再開できます。
-      </p>
-
       <div class="top-grid">
         <div class="field">
           <label for="rank">ランク</label>
@@ -326,17 +391,20 @@
           </select>
         </div>
 
-        <div class="field">
-          <label for="charLength">文字数</label>
-          <div class="char-wrap">
-            <input id="charLength" type="number" min="1" placeholder="例: 5">
-            <div class="char-hint-inline">空欄なら条件なし</div>
+        <div class="field alpha-wrap">
+          <label for="alphaTrigger">先頭文字</label>
+          <button class="alpha-trigger" id="alphaTrigger" type="button" aria-expanded="false">
+            <span class="alpha-value" id="alphaValue">なし</span>
+            <span class="alpha-arrow">▼</span>
+          </button>
+          <div class="alpha-panel" id="alphaPanel">
+            <div class="alpha-help">1文字だけでも、C→Hのような連続範囲でも選べます。長押ししたまま動かしてください。</div>
+            <div class="alpha-list" id="alphaList"></div>
+            <div class="alpha-actions">
+              <button class="mini-btn" id="alphaClearBtn" type="button">解除</button>
+              <button class="mini-btn" id="alphaCloseBtn" type="button">閉じる</button>
+            </div>
           </div>
-        </div>
-
-        <div class="field">
-          <label for="initialFilter">先頭文字条件</label>
-          <input id="initialFilter" type="text" placeholder="例: A-G / A,C,F / B">
         </div>
       </div>
 
@@ -345,48 +413,45 @@
         <button class="secondary" id="continueBtn">つづきから</button>
         <button class="danger" id="resetBtn">リセット</button>
       </div>
-
-      <div class="footer-note">
-        対象語数は入力に応じて自動更新されます。<br>
-        音声は端末内の英語音声から、できるだけ自然なものを自動選択します。<br>
-        iPhoneでは最初の1回、聞くボタンで反応を確かめてください。
-      </div>
     </div>
 
     <div class="card study-area" id="studyArea">
-      <div class="study-shell">
-        <div class="summary-panel">
-          <div class="summary-title">対象語数</div>
-          <div class="summary-count" id="sideCountText">-</div>
-          <div class="summary-sub" id="sideResumeText">保存なし</div>
-          <div class="review-summary" id="reviewSummaryText">苦手: 0</div>
-        </div>
+      <div class="top-bar">
+        <div class="badge" id="modeBadge">通常学習</div>
+        <div class="progress" id="progressText">0 / 0</div>
+      </div>
 
-        <div class="study-main">
-          <h2>学習画面</h2>
-          <div class="mode-badge" id="modeBadge">通常学習</div>
-          <div class="progress" id="progressText">0 / 0</div>
-          <div class="completed" id="completedText">完了しました</div>
+      <div class="flash-row">
+        <button class="flash-btn" data-flash="500" id="flash05Btn" type="button">フラッシュ 0.5秒</button>
+        <button class="flash-btn" data-flash="1000" id="flash1Btn" type="button">フラッシュ 1秒</button>
+        <div class="flash-status" id="flashStatusText">停止中</div>
+      </div>
+
+      <div class="study-main-grid">
+        <div class="word-box">
           <div class="word" id="wordText">-</div>
           <div class="meaning" id="meaningText">-</div>
           <div class="meta" id="metaText">-</div>
         </div>
 
-        <div class="study-side-buttons">
-          <button class="primary" id="nextBtn">次へ</button>
-          <button class="review-btn" id="ngBtn">苦手</button>
-          <button class="warning" id="speakBtn">聞く</button>
+        <div class="next-wrap">
+          <button class="primary" id="nextBtn" type="button">次へ</button>
         </div>
       </div>
+
+      <div class="bottom-row">
+        <button class="danger" id="ngBtn" type="button">苦手</button>
+        <button class="ghost" id="reviewModeBtn" type="button">苦手だけ</button>
+        <button class="warning" id="speakBtn" type="button">聞く</button>
+      </div>
+
+      <div class="completed" id="completedText">完了しました</div>
     </div>
   </div>
 
   <script>
-    /*
-      ここを「Excel貼るだけツール」の出力で置き換えてください
-    */
-   const DATA = {
-  A: [
+    const DATA = {
+     A: [
     { word: "a", meaning: "1つの" },
     { word: "ability", meaning: "能力" },
     { word: "able", meaning: "できる" },
@@ -1533,7 +1598,7 @@
     { word: "your", meaning: "あなたの" },
     { word: "yourself", meaning: "あなた自身" }
   ],
- B: [
+  B:[
     { word: "ability", meaning: "能力" },
     { word: "able", meaning: "できる" },
     { word: "abroad", meaning: "海外へ" },
@@ -3600,7 +3665,7 @@
     { word: "youth", meaning: "若者" },
     { word: "zone", meaning: "区域" }
   ],
- C: [
+  C: [
     { word: "abandon", meaning: "捨てる" },
     { word: "absolute", meaning: "完全な" },
     { word: "academic", meaning: "学問の" },
@@ -6959,116 +7024,83 @@
   ]
 };
 
-    const STORAGE_KEY = "oxford5000_mobile_only_state_v3";
+    const STORAGE_KEY = "oxford5000_compact_drag_initial_v1";
+    const ALPHABETS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
     const rankEl = document.getElementById("rank");
-    const charLengthEl = document.getElementById("charLength");
-    const initialFilterEl = document.getElementById("initialFilter");
-
+    const alphaTriggerEl = document.getElementById("alphaTrigger");
+    const alphaValueEl = document.getElementById("alphaValue");
+    const alphaPanelEl = document.getElementById("alphaPanel");
+    const alphaListEl = document.getElementById("alphaList");
+    const alphaClearBtn = document.getElementById("alphaClearBtn");
+    const alphaCloseBtn = document.getElementById("alphaCloseBtn");
     const startBtn = document.getElementById("startBtn");
     const continueBtn = document.getElementById("continueBtn");
     const resetBtn = document.getElementById("resetBtn");
 
     const studyAreaEl = document.getElementById("studyArea");
+    const modeBadgeEl = document.getElementById("modeBadge");
     const progressTextEl = document.getElementById("progressText");
-    const completedTextEl = document.getElementById("completedText");
     const wordTextEl = document.getElementById("wordText");
     const meaningTextEl = document.getElementById("meaningText");
     const metaTextEl = document.getElementById("metaText");
-    const modeBadgeEl = document.getElementById("modeBadge");
-
-    const sideCountTextEl = document.getElementById("sideCountText");
-    const sideResumeTextEl = document.getElementById("sideResumeText");
-    const reviewSummaryTextEl = document.getElementById("reviewSummaryText");
+    const completedTextEl = document.getElementById("completedText");
 
     const nextBtn = document.getElementById("nextBtn");
     const ngBtn = document.getElementById("ngBtn");
+    const reviewModeBtn = document.getElementById("reviewModeBtn");
     const speakBtn = document.getElementById("speakBtn");
+
+    const flashButtons = Array.from(document.querySelectorAll(".flash-btn[data-flash]"));
+    const flashStatusTextEl = document.getElementById("flashStatusText");
+
+    const NORMALIZED_DATA = normalizeData();
 
     let currentFilteredWords = [];
     let currentIndex = 0;
-    let reviewWords = [];
+    let currentRoundNgWords = [];
     let isReviewMode = false;
+    let flashResumeTimer = null;
+    let flashTimer = null;
+    let flashInterval = 0;
     let availableVoices = [];
+    let selectedStart = "";
+    let selectedEnd = "";
+    let dragSelecting = false;
+    let dragStartIndex = -1;
+    let dragCurrentIndex = -1;
 
-    function normalizeLevelData() {
-      const levels = ["A", "B", "C", "D", "E"];
-      const result = {};
-
-      for (const level of levels) {
-        const source = Array.isArray(DATA[level]) ? DATA[level] : [];
-        result[level] = source
-          .map(item => ({
-            word: String(item.word || "").trim(),
-            meaning: String(item.meaning || "").trim(),
+    function normalizeData() {
+      const out = {};
+      ["A", "B", "C", "D", "E"].forEach(level => {
+        const arr = Array.isArray(DATA[level]) ? DATA[level] : [];
+        out[level] = arr
+          .map(v => ({
+            word: String(v.word || "").trim(),
+            meaning: String(v.meaning || "").trim(),
             level
           }))
-          .filter(item => item.word && item.meaning);
-      }
-
-      return result;
-    }
-
-    const NORMALIZED_DATA = normalizeLevelData();
-
-    function parseInitialFilter(text) {
-      const raw = String(text || "").trim().toUpperCase();
-      if (!raw) return null;
-
-      const allowed = new Set();
-      const parts = raw.split(",").map(v => v.trim()).filter(Boolean);
-
-      for (const part of parts) {
-        if (/^[A-Z]-[A-Z]$/.test(part)) {
-          const start = part.charCodeAt(0);
-          const end = part.charCodeAt(2);
-          const min = Math.min(start, end);
-          const max = Math.max(start, end);
-
-          for (let i = min; i <= max; i++) {
-            allowed.add(String.fromCharCode(i));
-          }
-        } else if (/^[A-Z]$/.test(part)) {
-          allowed.add(part);
-        } else {
-          return { error: "先頭文字条件の書き方が不正です" };
-        }
-      }
-
-      return allowed;
-    }
-
-    function getFilteredWords(rank, charLength, initialSet) {
-      const words = NORMALIZED_DATA[rank] || [];
-
-      return words.filter(item => {
-        if (charLength && item.word.length !== charLength) return false;
-
-        if (initialSet) {
-          const first = item.word.charAt(0).toUpperCase();
-          if (!initialSet.has(first)) return false;
-        }
-
-        return true;
+          .filter(v => v.word && v.meaning);
       });
+      return out;
     }
 
     function saveState() {
-      const state = {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        rank: rankEl.value,
+        selectedStart,
+        selectedEnd,
         currentFilteredWords,
         currentIndex,
-        reviewWords,
+        currentRoundNgWords,
         isReviewMode,
-        savedAt: new Date().toISOString()
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      refreshSideInfo();
+        flashInterval
+      }));
     }
 
     function loadState() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return null;
-
       try {
         return JSON.parse(raw);
       } catch {
@@ -7078,274 +7110,401 @@
 
     function clearState() {
       localStorage.removeItem(STORAGE_KEY);
-      refreshSideInfo();
     }
 
-    function refreshSideInfo() {
-      const state = loadState();
-
-      if (!state || !Array.isArray(state.currentFilteredWords) || state.currentFilteredWords.length === 0) {
-        sideResumeTextEl.textContent = "保存なし";
-        return;
-      }
-
-      const total = state.currentFilteredWords.length;
-      const nextNum = Math.min(Number(state.currentIndex || 0) + 1, total);
-      sideResumeTextEl.textContent = nextNum + " / " + total;
+    function createAlphaList() {
+      alphaListEl.innerHTML = "";
+      ALPHABETS.forEach((letter, index) => {
+        const el = document.createElement("div");
+        el.className = "alpha-item";
+        el.textContent = letter;
+        el.dataset.index = index;
+        el.dataset.letter = letter;
+        alphaListEl.appendChild(el);
+      });
     }
 
-    function updateStudyCounters() {
-      sideCountTextEl.textContent = currentFilteredWords.length || "-";
+    function getRangeLetters(start, end) {
+      if (!start && !end) return [];
+      const s = start || end;
+      const e = end || start;
+      const startIdx = ALPHABETS.indexOf(s);
+      const endIdx = ALPHABETS.indexOf(e);
+      if (startIdx === -1 || endIdx === -1) return [];
+      const min = Math.min(startIdx, endIdx);
+      const max = Math.max(startIdx, endIdx);
+      return ALPHABETS.slice(min, max + 1);
+    }
 
-      if (!currentFilteredWords.length) {
-        sideResumeTextEl.textContent = "保存なし";
-      } else if (currentIndex >= currentFilteredWords.length) {
-        sideResumeTextEl.textContent = "完了";
-      } else {
-        sideResumeTextEl.textContent = (currentIndex + 1) + " / " + currentFilteredWords.length;
+    function getInitialSet() {
+      const letters = getRangeLetters(selectedStart, selectedEnd);
+      return letters.length ? new Set(letters) : null;
+    }
+
+    function getRangeText() {
+      if (!selectedStart && !selectedEnd) return "なし";
+      const s = selectedStart || selectedEnd;
+      const e = selectedEnd || selectedStart;
+      return s === e ? s : `${s}-${e}`;
+    }
+
+    function updateAlphaValue() {
+      alphaValueEl.textContent = getRangeText();
+    }
+
+    function renderAlphaSelection(previewMin = null, previewMax = null) {
+      const selected = new Set(getRangeLetters(selectedStart, selectedEnd));
+      alphaListEl.querySelectorAll(".alpha-item").forEach((el, index) => {
+        el.classList.toggle("active", selected.has(el.dataset.letter));
+        const preview = previewMin !== null && previewMax !== null && index >= previewMin && index <= previewMax;
+        el.classList.toggle("preview", preview);
+      });
+      updateAlphaValue();
+    }
+
+    function openAlphaPanel() {
+      alphaPanelEl.classList.add("open");
+      alphaTriggerEl.classList.add("open");
+      alphaTriggerEl.setAttribute("aria-expanded", "true");
+    }
+
+    function closeAlphaPanel() {
+      alphaPanelEl.classList.remove("open");
+      alphaTriggerEl.classList.remove("open");
+      alphaTriggerEl.setAttribute("aria-expanded", "false");
+      renderAlphaSelection();
+    }
+
+    function getAlphaIndexFromPoint(clientX, clientY) {
+      const target = document.elementFromPoint(clientX, clientY);
+      if (!target) return -1;
+      const item = target.closest(".alpha-item");
+      if (!item) return -1;
+      return Number(item.dataset.index);
+    }
+
+    function commitAlphaRange(startIdx, endIdx) {
+      if (startIdx < 0 && endIdx < 0) return;
+      const s = Math.max(0, startIdx < 0 ? endIdx : startIdx);
+      const e = Math.max(0, endIdx < 0 ? startIdx : endIdx);
+      const min = Math.min(s, e);
+      const max = Math.max(s, e);
+      selectedStart = ALPHABETS[min];
+      selectedEnd = ALPHABETS[max];
+      renderAlphaSelection();
+    }
+
+    function bindAlphaDrag() {
+      alphaListEl.addEventListener("pointerdown", (e) => {
+        const item = e.target.closest(".alpha-item");
+        if (!item) return;
+        dragSelecting = true;
+        dragStartIndex = Number(item.dataset.index);
+        dragCurrentIndex = dragStartIndex;
+        alphaListEl.setPointerCapture?.(e.pointerId);
+        renderAlphaSelection(dragStartIndex, dragCurrentIndex);
+      });
+
+      alphaListEl.addEventListener("pointermove", (e) => {
+        if (!dragSelecting) return;
+        const idx = getAlphaIndexFromPoint(e.clientX, e.clientY);
+        if (idx < 0) return;
+        dragCurrentIndex = idx;
+        renderAlphaSelection(Math.min(dragStartIndex, dragCurrentIndex), Math.max(dragStartIndex, dragCurrentIndex));
+      });
+
+      function finishDrag() {
+        if (!dragSelecting) return;
+        commitAlphaRange(dragStartIndex, dragCurrentIndex);
+        dragSelecting = false;
+        dragStartIndex = -1;
+        dragCurrentIndex = -1;
       }
 
-      reviewSummaryTextEl.textContent = "苦手: " + reviewWords.length;
-      modeBadgeEl.textContent = isReviewMode ? "苦手復習" : "通常学習";
+      alphaListEl.addEventListener("pointerup", finishDrag);
+      alphaListEl.addEventListener("pointercancel", finishDrag);
+    }
+
+    function getFilteredWords(rank, initialSet) {
+      const words = NORMALIZED_DATA[rank] || [];
+      return words.filter(item => {
+        if (!initialSet) return true;
+        const first = item.word.charAt(0).toUpperCase();
+        return initialSet.has(first);
+      });
+    }
+
+    function setModeBadge() {
+      modeBadgeEl.textContent = isReviewMode ? "苦手モード" : "通常学習";
+      modeBadgeEl.style.background = isReviewMode ? "#fff1f2" : "#eef2ff";
+      modeBadgeEl.style.color = isReviewMode ? "#b42318" : "#334155";
+    }
+
+    function updateProgress() {
+      const total = currentFilteredWords.length;
+      const now = total ? Math.min(currentIndex + 1, total) : 0;
+      progressTextEl.textContent = `${now} / ${total}`;
     }
 
     function renderCurrentWord() {
-      completedTextEl.style.display = "none";
+      setModeBadge();
+      updateProgress();
+      saveState();
 
-      if (!currentFilteredWords.length) {
-        progressTextEl.textContent = "0 / 0";
-        wordTextEl.textContent = "-";
-        meaningTextEl.textContent = "-";
-        metaTextEl.textContent = "-";
-        nextBtn.disabled = true;
-        ngBtn.disabled = true;
-        speakBtn.disabled = true;
-        updateStudyCounters();
-        return;
-      }
-
-      if (currentIndex >= currentFilteredWords.length) {
-        if (!isReviewMode && reviewWords.length > 0) {
-          currentFilteredWords = [...reviewWords];
-          currentIndex = 0;
-          isReviewMode = true;
-          reviewWords = [];
-          saveState();
-          renderCurrentWord();
-          return;
-        }
-
-        progressTextEl.textContent = currentFilteredWords.length + " / " + currentFilteredWords.length;
+      if (!currentFilteredWords.length || currentIndex >= currentFilteredWords.length) {
         completedTextEl.style.display = "block";
-        wordTextEl.textContent = isReviewMode ? "苦手復習まで完了しました" : "すべて表示しました";
-        meaningTextEl.textContent = "新しい条件で始めるか、リセットしてください。";
-        metaTextEl.textContent = "-";
-        nextBtn.disabled = true;
-        ngBtn.disabled = true;
-        speakBtn.disabled = true;
-        updateStudyCounters();
-        saveState();
+        wordTextEl.textContent = "おつかれさまでした";
+        meaningTextEl.textContent = currentRoundNgWords.length ? "必要なら苦手だけで次の周回へ進めます" : "完了です";
+        metaTextEl.textContent = `次の苦手: ${currentRoundNgWords.length}件`;
+        stopFlash();
         return;
       }
 
+      completedTextEl.style.display = "none";
       const item = currentFilteredWords[currentIndex];
-      progressTextEl.textContent = (currentIndex + 1) + " / " + currentFilteredWords.length;
       wordTextEl.textContent = item.word;
       meaningTextEl.textContent = item.meaning;
-      metaTextEl.textContent =
-        "ランク: " + item.level +
-        " / 文字数: " + item.word.length +
-        " / 先頭文字: " + item.word.charAt(0).toUpperCase();
-
-      nextBtn.disabled = false;
-      ngBtn.disabled = false;
-      speakBtn.disabled = false;
-      updateStudyCounters();
+      metaTextEl.textContent = `ランク: ${item.level} / 先頭文字: ${getRangeText()} / 合計 ${currentFilteredWords.length}語 / 次の苦手 ${currentRoundNgWords.length}件`;
     }
 
-    function showStudyArea() {
-      studyAreaEl.style.display = "block";
-      studyAreaEl.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function startStudy() {
-      const rank = rankEl.value;
-      const lenValue = String(charLengthEl.value || "").trim();
-      const charLength = lenValue ? Number(lenValue) : null;
-
-      if (lenValue && (!Number.isInteger(charLength) || charLength <= 0)) {
-        alert("文字数は1以上の整数で入れてください。");
-        return;
-      }
-
-      const initialSet = parseInitialFilter(initialFilterEl.value);
-      if (initialSet && initialSet.error) {
-        alert(initialSet.error);
-        return;
-      }
-
-      const filtered = getFilteredWords(rank, charLength, initialSet);
-
-      if (filtered.length === 0) {
+    function startStudyFromFilters() {
+      const filtered = getFilteredWords(rankEl.value, getInitialSet());
+      if (!filtered.length) {
         alert("条件に合う単語がありません。");
         return;
       }
 
       currentFilteredWords = filtered;
       currentIndex = 0;
-      reviewWords = [];
+      currentRoundNgWords = [];
       isReviewMode = false;
-      saveState();
+      studyAreaEl.style.display = "block";
+      closeAlphaPanel();
       renderCurrentWord();
-      showStudyArea();
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     }
 
     function continueStudy() {
       const state = loadState();
-
-      if (!state || !Array.isArray(state.currentFilteredWords) || state.currentFilteredWords.length === 0) {
+      if (!state || !Array.isArray(state.currentFilteredWords) || !state.currentFilteredWords.length) {
         alert("続きデータがありません。");
         return;
       }
 
-      currentFilteredWords = state.currentFilteredWords;
+      rankEl.value = state.rank || "A";
+      selectedStart = state.selectedStart || "";
+      selectedEnd = state.selectedEnd || "";
+      currentFilteredWords = state.currentFilteredWords || [];
       currentIndex = Number(state.currentIndex || 0);
-      reviewWords = Array.isArray(state.reviewWords) ? state.reviewWords : [];
+      currentRoundNgWords = Array.isArray(state.currentRoundNgWords) ? state.currentRoundNgWords : (Array.isArray(state.reviewWords) ? state.reviewWords : []);
       isReviewMode = Boolean(state.isReviewMode);
-
-      if (currentIndex < 0) currentIndex = 0;
-      if (currentIndex > currentFilteredWords.length) currentIndex = currentFilteredWords.length;
-
+      studyAreaEl.style.display = "block";
+      renderAlphaSelection();
       renderCurrentWord();
-      showStudyArea();
-    }
 
-    function resetAll() {
-      const ok = confirm("保存された続きデータを消して、最初からやり直しますか？");
-      if (!ok) return;
+      if (state.flashInterval) {
+        startFlash(Number(state.flashInterval));
+      }
 
-      speechSynthesis.cancel();
-      currentFilteredWords = [];
-      currentIndex = 0;
-      reviewWords = [];
-      isReviewMode = false;
-      clearState();
-      studyAreaEl.style.display = "none";
-      updateStudyCounters();
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     }
 
     function nextWord() {
       if (!currentFilteredWords.length) return;
       currentIndex += 1;
-      saveState();
       renderCurrentWord();
     }
 
-    function addCurrentToReview() {
-      if (!currentFilteredWords.length) return;
-      if (currentIndex >= currentFilteredWords.length) return;
-
+    function addReviewWord() {
+      if (!currentFilteredWords.length || currentIndex >= currentFilteredWords.length) return;
       const item = currentFilteredWords[currentIndex];
-      const exists = reviewWords.some(v => v.word === item.word && v.meaning === item.meaning && v.level === item.level);
+      const key = `${item.level}__${item.word}__${item.meaning}`;
+      const exists = currentRoundNgWords.some(v => `${v.level}__${v.word}__${v.meaning}` === key);
+      if (!exists) currentRoundNgWords.push(item);
+    }
 
-      if (!exists) {
-        reviewWords.push(item);
+    function markNgAndContinue() {
+      const wasFlashing = !!flashTimer;
+      const resumeSpeed = flashInterval;
+      addReviewWord();
+
+      ngBtn.style.transform = "scale(1.06)";
+      setTimeout(() => { ngBtn.style.transform = "scale(1)"; }, 140);
+
+      if (wasFlashing) {
+        stopFlash();
+        nextWord();
+        flashStatusTextEl.textContent = "苦手登録";
+        if (flashResumeTimer) clearTimeout(flashResumeTimer);
+        flashResumeTimer = setTimeout(() => {
+          if (currentIndex < currentFilteredWords.length) startFlash(resumeSpeed);
+        }, 700);
+      } else {
+        nextWord();
+      }
+    }
+
+    function startReviewMode() {
+      stopFlash();
+      if (!currentRoundNgWords.length) {
+        alert("この周回で苦手登録された単語がありません。");
+        return;
+      }
+      currentFilteredWords = [...currentRoundNgWords];
+      currentRoundNgWords = [];
+      currentIndex = 0;
+      isReviewMode = true;
+      renderCurrentWord();
+    }
+
+    function resetAll() {
+      stopFlash();
+      if (!confirm("保存データも含めてリセットしますか？")) return;
+      currentFilteredWords = [];
+      currentIndex = 0;
+      currentRoundNgWords = [];
+      isReviewMode = false;
+      selectedStart = "";
+      selectedEnd = "";
+      renderAlphaSelection();
+      studyAreaEl.style.display = "none";
+      completedTextEl.style.display = "none";
+      clearState();
+    }
+
+    function updateFlashUI() {
+      flashButtons.forEach(btn => {
+        btn.classList.toggle("active", flashTimer && Number(btn.dataset.flash) === flashInterval);
+      });
+      flashStatusTextEl.textContent = flashTimer ? `再生中 ${flashInterval / 1000}秒` : "停止中";
+    }
+
+    function stopFlash() {
+      if (flashTimer) {
+        clearInterval(flashTimer);
+        flashTimer = null;
+      }
+      if (flashResumeTimer) {
+        clearTimeout(flashResumeTimer);
+        flashResumeTimer = null;
+      }
+      flashInterval = 0;
+      updateFlashUI();
+      saveState();
+    }
+
+    function startFlash(ms) {
+      if (!currentFilteredWords.length) {
+        alert("先に学習を開始してください。");
+        return;
       }
 
-      currentIndex += 1;
+      if (flashTimer) clearInterval(flashTimer);
+      flashInterval = ms;
+      flashTimer = setInterval(() => {
+        if (currentIndex >= currentFilteredWords.length - 1) {
+          currentIndex = currentFilteredWords.length;
+          renderCurrentWord();
+          return;
+        }
+        currentIndex += 1;
+        renderCurrentWord();
+      }, ms);
+      updateFlashUI();
       saveState();
-      renderCurrentWord();
     }
 
     function loadVoices() {
-      availableVoices = speechSynthesis.getVoices() || [];
+      availableVoices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
     }
 
-    function scoreVoice(v) {
-      let score = 0;
-      const name = (v.name || "").toLowerCase();
-      const lang = (v.lang || "").toLowerCase();
-
-      if (lang.startsWith("en-us")) score += 60;
-      else if (lang.startsWith("en-gb")) score += 55;
-      else if (lang.startsWith("en-au")) score += 48;
-      else if (lang.startsWith("en")) score += 40;
-
-      if (v.localService) score += 10;
-
-      if (name.includes("siri")) score += 35;
-      if (name.includes("premium")) score += 25;
-      if (name.includes("enhanced")) score += 22;
-      if (name.includes("natural")) score += 22;
-      if (name.includes("alex")) score += 30;
-      if (name.includes("samantha")) score += 26;
-      if (name.includes("daniel")) score += 26;
-      if (name.includes("karen")) score += 20;
-      if (name.includes("serena")) score += 20;
-      if (name.includes("google us english")) score += 24;
-      if (name.includes("google uk english")) score += 24;
-
-      if (name.includes("compact")) score -= 8;
-      if (name.includes("fallback")) score -= 20;
-
-      return score;
-    }
-
-    function getBestEnglishVoice() {
+    function pickEnglishVoice() {
       if (!availableVoices.length) loadVoices();
-      if (!availableVoices.length) return null;
-
-      const englishVoices = availableVoices.filter(v => (v.lang || "").toLowerCase().startsWith("en"));
-      if (!englishVoices.length) return null;
-
-      englishVoices.sort((a, b) => scoreVoice(b) - scoreVoice(a));
-      return englishVoices[0];
+      const preferred = [
+        "Samantha", "Karen", "Daniel", "Google US English", "Google UK English Female",
+        "Google UK English Male", "Microsoft Aria Online (Natural)",
+        "Microsoft Guy Online (Natural)", "Microsoft Jenny Online (Natural)"
+      ];
+      for (const name of preferred) {
+        const found = availableVoices.find(v => v.name === name);
+        if (found) return found;
+      }
+      return availableVoices.find(v => /^en[-_]/i.test(v.lang)) || null;
     }
 
     function speakCurrentWord() {
-      if (!currentFilteredWords.length) return;
-      if (currentIndex >= currentFilteredWords.length) return;
-
+      if (!currentFilteredWords.length || currentIndex >= currentFilteredWords.length) return;
+      if (!("speechSynthesis" in window)) {
+        alert("この端末では読み上げに対応していません。");
+        return;
+      }
       const item = currentFilteredWords[currentIndex];
       const utter = new SpeechSynthesisUtterance(item.word);
-      const bestVoice = getBestEnglishVoice();
-
-      if (bestVoice) {
-        utter.voice = bestVoice;
-        utter.lang = bestVoice.lang || "en-US";
+      const voice = pickEnglishVoice();
+      if (voice) {
+        utter.voice = voice;
+        utter.lang = voice.lang || "en-US";
       } else {
         utter.lang = "en-US";
       }
-
       utter.rate = 0.92;
       utter.pitch = 1.0;
       utter.volume = 1.0;
-
       speechSynthesis.cancel();
       speechSynthesis.speak(utter);
     }
 
-    startBtn.addEventListener("click", startStudy);
+    alphaTriggerEl.addEventListener("click", () => {
+      if (alphaPanelEl.classList.contains("open")) {
+        closeAlphaPanel();
+      } else {
+        openAlphaPanel();
+      }
+    });
+
+    alphaClearBtn.addEventListener("click", () => {
+      selectedStart = "";
+      selectedEnd = "";
+      renderAlphaSelection();
+    });
+
+    alphaCloseBtn.addEventListener("click", closeAlphaPanel);
+
+    document.addEventListener("click", (e) => {
+      if (!alphaPanelEl.contains(e.target) && !alphaTriggerEl.contains(e.target)) {
+        closeAlphaPanel();
+      }
+    });
+
+    startBtn.addEventListener("click", startStudyFromFilters);
     continueBtn.addEventListener("click", continueStudy);
     resetBtn.addEventListener("click", resetAll);
-    nextBtn.addEventListener("click", nextWord);
-    ngBtn.addEventListener("click", addCurrentToReview);
+    nextBtn.addEventListener("click", () => {
+      stopFlash();
+      nextWord();
+    });
+    ngBtn.addEventListener("click", markNgAndContinue);
+    reviewModeBtn.addEventListener("click", startReviewMode);
     speakBtn.addEventListener("click", speakCurrentWord);
 
-    rankEl.addEventListener("change", () => {});
-    charLengthEl.addEventListener("input", () => {});
-    initialFilterEl.addEventListener("input", () => {});
+    flashButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const ms = Number(btn.dataset.flash);
+        if (flashTimer && flashInterval === ms) {
+          stopFlash();
+        } else {
+          startFlash(ms);
+        }
+      });
+    });
 
-    if (typeof speechSynthesis !== "undefined") {
-      loadVoices();
-      if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = loadVoices;
-      }
+    createAlphaList();
+    bindAlphaDrag();
+    renderAlphaSelection();
+    loadVoices();
+    if ("speechSynthesis" in window) {
+      speechSynthesis.onvoiceschanged = loadVoices;
     }
-
-    updateStudyCounters();
-    refreshSideInfo();
-    renderCurrentWord();
   </script>
 </body>
 </html>
