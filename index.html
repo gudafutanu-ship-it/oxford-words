@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
   <title>Oxford5000</title>
 
   <style>
@@ -36,15 +38,21 @@
       background:var(--bg);
       color:var(--text);
       font-family:"Yu Gothic","Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;
+      overflow-x:hidden;
+      width:100%;
     }
 
     body{
       padding:10px;
+      overscroll-behavior:none;
+      touch-action:manipulation;
     }
 
     .wrap{
       max-width:920px;
       margin:0 auto;
+      max-width:100%;
+      overflow:hidden;
     }
 
     .panel{
@@ -53,6 +61,8 @@
       border-radius:28px;
       box-shadow:var(--shadow);
       padding:14px;
+      max-width:100%;
+      overflow:hidden;
     }
 
     .top-grid{
@@ -115,6 +125,7 @@
       color:#fff;
       font-weight:900;
       cursor:pointer;
+      touch-action:manipulation;
     }
 
     .main-grid{
@@ -137,6 +148,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      touch-action:manipulation;
     }
 
     .stop-btn{
@@ -182,7 +194,8 @@
       width:100%;
       text-align:center;
       font-size:54px;
-      letter-spacing:0;
+      letter-spacing:-0.03em;
+      transform-origin:center center;
     }
 
     .meaning{
@@ -207,6 +220,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      touch-action:manipulation;
     }
 
     .below-card{
@@ -234,6 +248,7 @@
       font-weight:900;
       cursor:pointer;
       flex-shrink:0;
+      touch-action:manipulation;
     }
 
     .jp-toggle.active{
@@ -255,6 +270,7 @@
       color:#fff;
       font-weight:900;
       cursor:pointer;
+      touch-action:manipulation;
     }
 
     .memory-btn{
@@ -269,7 +285,6 @@
       background:linear-gradient(180deg,var(--orange1),var(--orange2));
     }
 
-    /* iPhone優先の安定設定 */
     @media (max-width: 480px){
       body{
         padding:8px;
@@ -316,7 +331,7 @@
       }
 
       .word{
-        font-size:30px !important;
+        font-size:22px !important;
       }
 
       .meaning{
@@ -347,10 +362,9 @@
       }
     }
 
-    /* 中くらいのスマホ */
     @media (min-width: 481px) and (max-width: 767px){
       .word{
-        font-size:40px;
+        font-size:34px;
       }
 
       .meaning{
@@ -422,19 +436,8 @@
   </div>
 
   <script>
-    /*
-      ここに単語データを入れてください
-      例:
-      const DATA = {
-        A: [{ word: "apple", meaning: "りんご" }],
-        B: [],
-        C: [],
-        D: [],
-        E: []
-      };
-    */
     const DATA = {
-     A: [
+      A: [
     { word: "a", meaning: "1つの" },
     { word: "ability", meaning: "能力" },
     { word: "able", meaning: "できる" },
@@ -7032,6 +7035,7 @@
     const meanEl = document.getElementById("meaning");
     const metaEl = document.getElementById("meta");
     const memoryCountEl = document.getElementById("memoryCount");
+    const cardBoxEl = document.querySelector(".card-box");
 
     function updateMemoryCount(){
       memoryCountEl.textContent = "記憶カード総数：" + memoryList.length + "枚";
@@ -7092,6 +7096,21 @@
       i = 0;
     }
 
+    function fitWordToOneLine(){
+      if (!wordEl || !cardBoxEl) return;
+
+      let size = window.innerWidth <= 480 ? 22 : (window.innerWidth <= 767 ? 34 : 54);
+      const minSize = 10;
+      const availableWidth = cardBoxEl.clientWidth - 24;
+
+      wordEl.style.fontSize = size + "px";
+
+      while (size > minSize && wordEl.scrollWidth > availableWidth) {
+        size -= 1;
+        wordEl.style.fontSize = size + "px";
+      }
+    }
+
     function show(){
       if (!list.length) {
         if (memoryList.length === 0) {
@@ -7107,6 +7126,7 @@
         meanEl.style.display = showJP ? "block" : "none";
         toggleJPBtn.classList.toggle("active", showJP);
         updateMemoryCount();
+        requestAnimationFrame(fitWordToOneLine);
         return;
       }
 
@@ -7122,6 +7142,7 @@
       }
 
       updateMemoryCount();
+      requestAnimationFrame(fitWordToOneLine);
     }
 
     function stopFlash(){
@@ -7226,6 +7247,27 @@
       loadVoices();
       speechSynthesis.onvoiceschanged = loadVoices;
     }
+
+    document.addEventListener("gesturestart", function(e){
+      e.preventDefault();
+    });
+
+    let lastTouchEnd = 0;
+    document.addEventListener("touchend", function(e){
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, { passive:false });
+
+    window.addEventListener("resize", () => {
+      requestAnimationFrame(fitWordToOneLine);
+    });
+
+    window.addEventListener("load", () => {
+      requestAnimationFrame(fitWordToOneLine);
+    });
 
     show();
     updateMemoryCount();
