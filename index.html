@@ -1,247 +1,421 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#4f7df3">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Oxford5000</title>
-<style>
-body{
-  font-family:sans-serif;
-  background:#f4f6fb;
-  margin:0;
-  padding:10px;
-}
-.panel{
-  background:#fff;
-  border-radius:20px;
-  padding:12px;
-  max-width:900px;
-  margin:auto;
-  box-sizing:border-box;
-}
-.top{
-  display:grid;
-  grid-template-columns:80px 110px minmax(0,1fr);
-  gap:10px;
-  align-items:end;
-}
-label{
-  display:block;
-  font-weight:bold;
-  margin-bottom:4px;
-}
-input,select{
-  height:45px;
-  border-radius:12px;
-  border:1px solid #ccc;
-  padding:0 10px;
-  font-size:16px;
-  width:100%;
-  box-sizing:border-box;
-}
-.flash{
-  display:grid;
-  grid-template-columns:72px 34px minmax(110px, 1fr);
-  gap:8px;
-  align-items:center;
-}
-.flash input{
-  text-align:center;
-  padding:0 6px;
-}
-.flash span{
-  font-size:16px;
-  font-weight:bold;
-  white-space:nowrap;
-}
-.start{
-  background:#e74c3c;
-  color:#fff;
-  border:none;
-  border-radius:12px;
-  height:52px;
-  padding:0 20px;
-  font-weight:bold;
-  font-size:18px;
-  cursor:pointer;
-  width:100%;
-}
-.study{
-  display:grid;
-  grid-template-columns:60px 1fr 60px;
-  gap:8px;
-  margin-top:12px;
-}
-.side{
-  writing-mode:vertical-rl;
-  text-orientation:upright;
-  border:none;
-  border-radius:20px;
-  color:#fff;
-  font-weight:bold;
-  font-size:18px;
-  cursor:pointer;
-}
-.next{background:#4f7df3}
-.stop{background:#2ecc71}
-.card{
-  border:1px solid #ccc;
-  border-radius:16px;
-  min-height:300px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  position:relative;
-  background:#fff;
-  text-align:center;
-  padding:20px 14px 70px;
-  box-sizing:border-box;
-}
-.word{
-  font-size: clamp(28px, 6vw, 64px);
-  word-break: keep-all;
-  overflow-wrap: normal;
-}
-.mean{
-  font-size:24px;
-  color:#334155;
-  margin-top:10px;
-  word-break:break-word;
-}
-.spk{
-  position:absolute;
-  left:10px;
-  bottom:10px;
-  border-radius:50%;
-  width:50px;
-  height:50px;
-  border:none;
-  font-size:24px;
-  cursor:pointer;
-  background:#fff7e8;
-}
-.meta{
-  margin-top:8px;
-  text-align:center;
-  font-weight:bold;
-}
-.bottom{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:8px;
-  margin-top:12px;
-}
-.bottom button{
-  height:55px;
-  border:none;
-  border-radius:16px;
-  color:#fff;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-}
-#memory{background:#e74c3c;}
-#review{background:#34495e;}
-#back{background:#f39c12;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Oxford5000</title>
 
-@media (max-width:640px){
-  .top{
-    grid-template-columns:78px 98px minmax(0,1fr);
-    gap:8px;
-  }
-  .flash{
-    grid-template-columns:60px 26px minmax(96px, 1fr);
-    gap:6px;
-  }
-  .start{
-    height:50px;
-    font-size:17px;
-    padding:0 14px;
-  }
-  .card{
-    min-height:250px;
-  }
-  .word{
-    font-size:42px;
-  }
-  .mean{
-    font-size:22px;
-  }
+  <style>
+    :root{
+      --bg:#f4f6fb;
+      --card:#ffffff;
+      --line:#d7deea;
+      --text:#0f172a;
+      --muted:#64748b;
+      --blue1:#5b86f3;
+      --blue2:#3567e8;
+      --green1:#43c06b;
+      --green2:#29a957;
+      --red1:#f35a48;
+      --red2:#e84533;
+      --gray1:#7c8da6;
+      --gray2:#677990;
+      --orange:#f6b331;
+      --orange2:#ee9b0f;
+      --shadow:0 10px 28px rgba(15,23,42,.08);
+    }
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:"Yu Gothic","Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;
+    }
+
+    body{
+      padding:10px;
+    }
+
+    .wrap{
+      max-width:920px;
+      margin:0 auto;
+    }
+
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
+
+    .top-grid{
+      display:grid;
+      grid-template-columns:90px 120px 90px 34px 1fr;
+      gap:10px;
+      align-items:end;
+      margin-bottom:12px;
+    }
+
+    .field label{
+      display:block;
+      font-size:13px;
+      font-weight:800;
+      margin:0 0 6px 2px;
+    }
+
+    .field select,
+    .field input,
+    .start-btn,
+    .bottom-btn,
+    .side-btn,
+    .jp-toggle,
+    .speaker{
+      font-size:16px;
+    }
+
+    .field select,
+    .field input{
+      width:100%;
+      height:48px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      color:var(--text);
+      padding:0 12px;
+      outline:none;
+    }
+
+    .field input::placeholder{
+      color:#94a3b8;
+    }
+
+    .sec-unit{
+      height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .start-btn{
+      width:100%;
+      height:48px;
+      border:none;
+      border-radius:16px;
+      background:linear-gradient(180deg, var(--red1), var(--red2));
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .main-grid{
+      display:grid;
+      grid-template-columns:68px 1fr 68px;
+      gap:10px;
+      align-items:stretch;
+    }
+
+    .side-btn{
+      min-height:52vh;
+      border:none;
+      border-radius:24px;
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+      writing-mode:vertical-rl;
+      text-orientation:upright;
+      letter-spacing:2px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .stop-btn{
+      background:linear-gradient(180deg, var(--green1), var(--green2));
+    }
+
+    .next-btn{
+      background:linear-gradient(180deg, var(--blue1), var(--blue2));
+    }
+
+    .center-col{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .card-box{
+      position:relative;
+      min-height:52vh;
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:#fcfdff;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:20px 18px 70px;
+      overflow:hidden;
+    }
+
+    .word{
+  margin:0 0 14px 0;
+  font-weight:900;
+  line-height:1.02;
+  white-space:nowrap;
+  overflow:hidden;
+  word-break:keep-all;
+  overflow-wrap:normal;
+  display:block;
+  width:100%;
+  max-width:100%;
+  font-size:60px;
 }
-</style>
+
+    .meaning{
+      margin:0;
+      font-size:clamp(24px, 5vw, 38px);
+      line-height:1.25;
+      color:#334155;
+      word-break:break-word;
+    }
+
+    .speaker{
+      position:absolute;
+      left:12px;
+      bottom:12px;
+      width:58px;
+      height:58px;
+      border:none;
+      border-radius:999px;
+      background:#fff6dd;
+      box-shadow:0 4px 12px rgba(0,0,0,.08);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .below-card{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:start;
+    }
+
+    .below-text{
+      text-align:center;
+      font-size:16px;
+      font-weight:800;
+      line-height:1.5;
+      min-height:52px;
+    }
+
+    .jp-toggle{
+      width:54px;
+      height:54px;
+      border:none;
+      border-radius:14px;
+      background:#edf2fb;
+      color:#334155;
+      font-weight:900;
+      cursor:pointer;
+      flex-shrink:0;
+      }
+      
+.jp-toggle.active {
+  background: linear-gradient(180deg, #4f7df3, #3567e8);
+  color: white;
+}
+
+    .jp-toggle.active{
+      background:linear-gradient(180deg, var(--blue1), var(--blue2));
+      color:#fff;
+    }
+
+    .bottom-row{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .bottom-btn{
+      height:58px;
+      border:none;
+      border-radius:18px;
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .memory-btn{
+      background:linear-gradient(180deg, var(--red1), var(--red2));
+    }
+
+    .review-btn{
+      background:linear-gradient(180deg, var(--gray1), var(--gray2));
+    }
+
+    .back-btn{
+      background:linear-gradient(180deg, var(--orange), var(--orange2));
+    }
+
+    @media (max-width: 640px){
+      body{
+        padding:8px;
+      }
+
+      .panel{
+        padding:10px;
+        border-radius:24px;
+      }
+
+      .top-grid{
+        grid-template-columns:74px 92px 74px 24px 1fr;
+        gap:8px;
+      }
+
+      .field select,
+      .field input,
+      .start-btn{
+        height:46px;
+        border-radius:14px;
+        padding:0 10px;
+      }
+
+      .sec-unit{
+        height:46px;
+        font-size:16px;
+      }
+
+      .main-grid{
+        grid-template-columns:56px 1fr 56px;
+        gap:8px;
+      }
+
+      .side-btn{
+        min-height:46vh;
+        border-radius:22px;
+      }
+
+      .card-box{
+        min-height:46vh;
+        border-radius:22px;
+        padding:16px 10px 66px;
+      }
+
+      .speaker{
+        width:54px;
+        height:54px;
+        left:10px;
+        bottom:10px;
+      }
+
+      .below-text{
+        font-size:14px;
+        min-height:48px;
+      }
+
+      .jp-toggle{
+        width:48px;
+        height:48px;
+        border-radius:12px;
+      }
+
+      .bottom-btn{
+        height:56px;
+        border-radius:16px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="panel">
+  <div class="wrap">
+    <div class="panel">
 
-  <div class="top">
-    <div>
-      <label for="rank">ランク</label>
-      <select id="rank">
-        <option>A</option>
-        <option>B</option>
-        <option>C</option>
-        <option>D</option>
-        <option>E</option>
-      </select>
-    </div>
+      <div class="top-grid">
+        <div class="field">
+          <label for="rank">ランク</label>
+          <select id="rank">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </div>
 
-    <div>
-      <label for="initial">先頭文字</label>
-      <input id="initial" placeholder="A" maxlength="1">
-    </div>
+        <div class="field">
+          <label for="initial">先頭文字</label>
+          <input id="initial" type="text" maxlength="1" placeholder="A">
+        </div>
 
-    <div>
-      <label for="sec">フラッシュ時間</label>
-      <div class="flash">
-        <input id="sec" type="number" value="1.5" step="0.1" min="0">
-        <span>秒</span>
-        <button class="start" id="start">スタート</button>
+        <div class="field">
+          <label for="sec">フラッシュ時間</label>
+          <input id="sec" type="number" value="1.5" step="0.1" min="0">
+        </div>
+
+        <div class="sec-unit">秒</div>
+
+        <button class="start-btn" id="start">スタート</button>
       </div>
-    </div>
-  </div>
 
-  <div class="study">
-    <button class="side next" id="next">次へ</button>
+      <div class="main-grid">
+        <button class="side-btn stop-btn" id="stop">ストップ</button>
 
-    <div>
-      <div class="card">
-        <div id="word" class="word">-</div>
-        <div id="mean" class="mean">-</div>
-        <button class="spk" id="speak">🔈</button>
+        <div class="center-col">
+          <div class="card-box">
+            <div class="word" id="word">-</div>
+            <div class="meaning" id="meaning">-</div>
+            <button class="speaker" id="speak" aria-label="聞く">🔈</button>
+          </div>
+
+          <div class="below-card">
+            <div class="below-text">
+              <div id="meta">準備OK</div>
+              <div id="memoryCount">記憶カード総数：0枚</div>
+            </div>
+            <button class="jp-toggle active" id="toggleJP">日本語</button>
+          </div>
+        </div>
+
+        <button class="side-btn next-btn" id="next">次へ</button>
       </div>
-      <div class="meta" id="meta">準備OK</div>
-      <div class="meta" id="memoryCount">記憶カード総数：0枚</div>
+
+      <div class="bottom-row">
+        <button class="bottom-btn memory-btn" id="memory">記憶</button>
+        <button class="bottom-btn review-btn" id="review">復習</button>
+        <button class="bottom-btn back-btn" id="back">戻る</button>
+      </div>
+
     </div>
-
-    <button class="side stop" id="stop">ストップ</button>
   </div>
 
-  <div class="bottom">
-    <button id="memory">記憶</button>
-    <button id="review">復習</button>
-    <button id="back">戻る</button>
-  </div>
-
-</div>
-
-<script>
-/*
-  ここに単語データを入れてください
-  例:
-  const DATA = {
-    A: [{ word: "apple", meaning: "りんご" }],
-    B: [],
-    C: [],
-    D: [],
-    E: []
-  };
-*/
-const DATA = {
- A: [
+  <script>
+    /*
+      ここに単語データを入れてください
+      例:
+      const DATA = {
+        A: [{ word: "apple", meaning: "りんご" }],
+        B: [],
+        C: [],
+        D: [],
+        E: []
+      };
+    */
+    const DATA = {
+       A: [
     { word: "a", meaning: "1つの" },
     { word: "ability", meaning: "能力" },
     { word: "able", meaning: "できる" },
@@ -6810,215 +6984,248 @@ const DATA = {
     { word: "yield", meaning: "生み出す" },
     { word: "yield", meaning: "収穫" }
   ],
-  E: []
-};
+      E: []
+    };
 
-let list = [];
-let i = 0;
-let timer = null;
-let memoryList = [];
-let history = [];
-let voices = [];
+    let list = [];
+    let i = 0;
+    let timer = null;
+    let memoryList = [];
+    let history = [];
+    let showJP = true;
+    let voices = [];
 
-const rankEl = document.getElementById("rank");
-const initialEl = document.getElementById("initial");
-const secEl = document.getElementById("sec");
-const startBtn = document.getElementById("start");
-const nextBtn = document.getElementById("next");
-const stopBtn = document.getElementById("stop");
-const speakBtn = document.getElementById("speak");
+    const rankEl = document.getElementById("rank");
+    const initialEl = document.getElementById("initial");
+    const secEl = document.getElementById("sec");
 
-const memoryBtn = document.getElementById("memory");
-const reviewBtn = document.getElementById("review");
-const backBtn = document.getElementById("back");
+    const startBtn = document.getElementById("start");
+    const stopBtn = document.getElementById("stop");
+    const nextBtn = document.getElementById("next");
+    const speakBtn = document.getElementById("speak");
 
-const wordEl = document.getElementById("word");
-const meanEl = document.getElementById("mean");
-const metaEl = document.getElementById("meta");
-const memoryCountEl = document.getElementById("memoryCount");
+    const memoryBtn = document.getElementById("memory");
+    const reviewBtn = document.getElementById("review");
+    const backBtn = document.getElementById("back");
+    const toggleJPBtn = document.getElementById("toggleJP");
 
-function updateMemoryCount(){
-  memoryCountEl.textContent = "記憶カード総数：" + memoryList.length + "枚";
-}
+    const wordEl = document.getElementById("word");
+    const meanEl = document.getElementById("meaning");
+    const metaEl = document.getElementById("meta");
+    const memoryCountEl = document.getElementById("memoryCount");
 
-function loadVoices(){
-  if ("speechSynthesis" in window) {
-    voices = speechSynthesis.getVoices();
-  }
-}
-
-if ("speechSynthesis" in window) {
-  loadVoices();
-  speechSynthesis.onvoiceschanged = loadVoices;
-}
-
-function pickVoice(){
-  const preferred = [
-    "Samantha",
-    "Karen",
-    "Daniel",
-    "Google US English",
-    "Google UK English Female",
-    "Google UK English Male"
-  ];
-
-  for (const name of preferred) {
-    const v = voices.find(x => x.name === name);
-    if (v) return v;
-  }
-
-  return voices.find(v => /^en/i.test(v.lang)) || null;
-}
-
-function speakCurrent(){
-  if (!list.length || !("speechSynthesis" in window)) return;
-
-  const ut = new SpeechSynthesisUtterance(list[i].word);
-  const voice = pickVoice();
-
-  if (voice) {
-    ut.voice = voice;
-    ut.lang = voice.lang || "en-US";
-  } else {
-    ut.lang = "en-US";
-  }
-
-  ut.rate = 0.92;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(ut);
-}
-
-function load(){
-  const rank = rankEl.value;
-  const init = initialEl.value.trim().toUpperCase();
-
-  const base = Array.isArray(DATA[rank]) ? DATA[rank] : [];
-
-  list = base.filter(x => {
-    const word = String(x.word || "");
-    return !init || word.toUpperCase().startsWith(init);
-  });
-
-  i = 0;
-}
-
-function show(){
-  if (!list.length) {
-    if (memoryList.length === 0) {
-      wordEl.textContent = "OK！";
-      meanEl.textContent = "記憶カードがありません";
-      metaEl.textContent = "復習するものがありません";
-    } else {
-      wordEl.textContent = "なし";
-      meanEl.textContent = "対象単語がありません";
-      metaEl.textContent = "0件";
+    function updateMemoryCount(){
+      memoryCountEl.textContent = "記憶カード総数：" + memoryList.length + "枚";
     }
 
-    updateMemoryCount();
-    return;
-  }
+    function loadVoices(){
+      if ("speechSynthesis" in window) {
+        voices = speechSynthesis.getVoices();
+      }
+    }
 
-  wordEl.textContent = list[i].word;
-  meanEl.textContent = list[i].meaning;
-  metaEl.textContent = (i + 1) + " / " + list.length;
-  updateMemoryCount();
+    function pickVoice(){
+      const preferred = [
+        "Samantha",
+        "Karen",
+        "Daniel",
+        "Google US English",
+        "Google UK English Female",
+        "Google UK English Male"
+      ];
+
+      for (const name of preferred) {
+        const v = voices.find(x => x.name === name);
+        if (v) return v;
+      }
+
+      return voices.find(v => /^en/i.test(v.lang)) || null;
+    }
+
+    function speakCurrent(){
+      if (!list.length || !("speechSynthesis" in window)) return;
+
+      const ut = new SpeechSynthesisUtterance(list[i].word);
+      const voice = pickVoice();
+
+      if (voice) {
+        ut.voice = voice;
+        ut.lang = voice.lang || "en-US";
+      } else {
+        ut.lang = "en-US";
+      }
+
+      ut.rate = 0.92;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(ut);
+    }
+
+    function loadList(){
+      const rank = rankEl.value;
+      const init = initialEl.value.trim().toUpperCase();
+      const base = Array.isArray(DATA[rank]) ? DATA[rank] : [];
+
+      list = base.filter(x => {
+        const word = String(x.word || "");
+        return !init || word.toUpperCase().startsWith(init);
+      });
+
+      i = 0;
+    }
+
+   function fitWordToOneLine(){
+  const el = wordEl;
+
+  el.style.fontSize = "60px";
+
+  let size = 60;
+  const minSize = 12;
+
+  while (size > minSize && el.scrollWidth > el.clientWidth) {
+    size -= 1;
+    el.style.fontSize = size + "px";
+  }
 }
 
-function stopFlash(){
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  }
+    function show(){
+      if (!list.length) {
+        if (memoryList.length === 0) {
+          wordEl.textContent = "OK！";
+          meanEl.textContent = "復習するものがありません";
+          metaEl.textContent = "記憶カードがありません";
+        } else {
+          wordEl.textContent = "なし";
+          meanEl.textContent = "対象単語がありません";
+          metaEl.textContent = "0件";
+        }
+
+        meanEl.style.display = showJP ? "block" : "none";
+        toggleJPBtn.classList.toggle("active", showJP);
+        updateMemoryCount();
+        fitWordToOneLine();
+        return;
+      }
+
+      wordEl.textContent = list[i].word;
+      meanEl.textContent = list[i].meaning;
+      meanEl.style.display = showJP ? "block" : "none";
+      toggleJPBtn.classList.toggle("active", showJP);
+
+      metaEl.textContent = (i + 1) + " / " + list.length;
+      if(i === list.length - 1){
+  metaEl.textContent = "終了！お疲れ様です";
 }
+      updateMemoryCount();
+      requestAnimationFrame(fitWordToOneLine);
+    }
 
-function startStudy(){
-  stopFlash();
-  load();
-  show();
+    function stopFlash(){
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
 
-  const sec = parseFloat(secEl.value);
-  if (!isFinite(sec) || sec <= 0 || !list.length) return;
-
-  timer = setInterval(() => {
-    if (i >= list.length - 1) {
+    function startStudy(){
       stopFlash();
-      return;
+      loadList();
+      show();
+
+      const sec = parseFloat(secEl.value);
+      if (!isFinite(sec) || sec <= 0 || !list.length) return;
+
+      timer = setInterval(() => {
+        if (i >= list.length - 1) {
+          stopFlash();
+          return;
+        }
+        history.push(i);
+        i++;
+        show();
+      }, sec * 1000);
     }
-    history.push(i);
-    i++;
+
+    function nextWord(){
+      stopFlash();
+
+      if (!list.length) {
+        loadList();
+        show();
+        return;
+      }
+
+      history.push(i);
+
+      if (i < list.length - 1) {
+        i++;
+      }
+
+      show();
+    }
+
+    function addMemory(){
+      if (!list.length) return;
+
+      const item = list[i];
+      if (!memoryList.find(x => x.word === item.word && x.meaning === item.meaning)) {
+        memoryList.push(item);
+      }
+
+      updateMemoryCount();
+    }
+
+    function reviewWords(){
+      stopFlash();
+
+      if (!memoryList.length) {
+        list = [];
+        show();
+        return;
+      }
+
+      list = [...memoryList];
+      i = 0;
+      show();
+    }
+
+    function goBack(){
+      stopFlash();
+
+      if (history.length) {
+        i = history.pop();
+        show();
+      }
+    }
+
+    function toggleJapanese(){
+      showJP = !showJP;
+      show();
+    }
+
+    startBtn.addEventListener("click", startStudy);
+    stopBtn.addEventListener("click", stopFlash);
+    nextBtn.addEventListener("click", nextWord);
+    speakBtn.addEventListener("click", speakCurrent);
+
+    memoryBtn.addEventListener("click", addMemory);
+    reviewBtn.addEventListener("click", reviewWords);
+    backBtn.addEventListener("click", goBack);
+    toggleJPBtn.addEventListener("click", toggleJapanese);
+
+    initialEl.addEventListener("input", () => {
+      initialEl.value = initialEl.value.replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 1);
+    });
+
+    if ("speechSynthesis" in window) {
+      loadVoices();
+      speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
     show();
-  }, sec * 1000);
-}
-
-function nextWord(){
-  stopFlash();
-
-  if (!list.length) {
-    load();
-    show();
-    return;
-  }
-
-  history.push(i);
-
-  if (i < list.length - 1) {
-    i++;
-  }
-
-  show();
-}
-
-function addMemory(){
-  if (!list.length) return;
-
-  const item = list[i];
-
-  if (!memoryList.find(x => x.word === item.word && x.meaning === item.meaning)) {
-    memoryList.push(item);
-  }
-
-  updateMemoryCount();
-}
-
-function reviewWords(){
-  stopFlash();
-
-  if (!memoryList.length) {
-    list = [];
-    show();
-    return;
-  }
-
-  list = [...memoryList];
-  i = 0;
-  show();
-}
-
-function goBack(){
-  stopFlash();
-
-  if (history.length) {
-    i = history.pop();
-    show();
-  }
-}
-
-startBtn.addEventListener("click", startStudy);
-nextBtn.addEventListener("click", nextWord);
-stopBtn.addEventListener("click", stopFlash);
-speakBtn.addEventListener("click", speakCurrent);
-
-memoryBtn.addEventListener("click", addMemory);
-reviewBtn.addEventListener("click", reviewWords);
-backBtn.addEventListener("click", goBack);
-
-initialEl.addEventListener("input", () => {
-  initialEl.value = initialEl.value.replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 1);
+    updateMemoryCount();
+    window.addEventListener("resize", () => {
+  requestAnimationFrame(fitWordToOneLine);
 });
-
-show();
-updateMemoryCount();
-</script>
-
+  </script>
 </body>
 </html>
