@@ -20,7 +20,7 @@
       --red2:#e84533;
       --gray1:#7c8da6;
       --gray2:#677990;
-      --orange:#f6b331;
+      --orange1:#f6b331;
       --orange2:#ee9b0f;
       --shadow:0 10px 28px rgba(15,23,42,.08);
     }
@@ -30,7 +30,7 @@
       -webkit-tap-highlight-color:transparent;
     }
 
-    html, body{
+    html,body{
       margin:0;
       padding:0;
       background:var(--bg);
@@ -70,8 +70,8 @@
       margin:0 0 6px 2px;
     }
 
-    .field select,
     .field input,
+    .field select,
     .start-btn,
     .bottom-btn,
     .side-btn,
@@ -80,8 +80,8 @@
       font-size:16px;
     }
 
-    .field select,
-    .field input{
+    .field input,
+    .field select{
       width:100%;
       height:48px;
       border:1px solid var(--line);
@@ -111,7 +111,7 @@
       height:48px;
       border:none;
       border-radius:16px;
-      background:linear-gradient(180deg, var(--red1), var(--red2));
+      background:linear-gradient(180deg,var(--red1),var(--red2));
       color:#fff;
       font-weight:900;
       cursor:pointer;
@@ -140,17 +140,18 @@
     }
 
     .stop-btn{
-      background:linear-gradient(180deg, var(--green1), var(--green2));
+      background:linear-gradient(180deg,var(--green1),var(--green2));
     }
 
     .next-btn{
-      background:linear-gradient(180deg, var(--blue1), var(--blue2));
+      background:linear-gradient(180deg,var(--blue1),var(--blue2));
     }
 
     .center-col{
       display:flex;
       flex-direction:column;
       gap:10px;
+      min-width:0;
     }
 
     .card-box{
@@ -168,18 +169,25 @@
       overflow:hidden;
     }
 
-   .word {
-  font-size: clamp(28px, 8vw, 64px);
-  font-weight: 800;
-  text-align: center;
-  white-space: nowrap;
-      overflow: hidden;
-  text-overflow: ellipsis;
-}
+    .word{
+      margin:0 0 14px 0;
+      font-weight:900;
+      line-height:1.02;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:clip;
+      word-break:keep-all;
+      overflow-wrap:normal;
+      max-width:100%;
+      width:100%;
+      text-align:center;
+      font-size:54px;
+      letter-spacing:0;
+    }
 
     .meaning{
       margin:0;
-      font-size:clamp(24px, 5vw, 38px);
+      font-size:34px;
       line-height:1.25;
       color:#334155;
       word-break:break-word;
@@ -221,20 +229,15 @@
       height:54px;
       border:none;
       border-radius:14px;
-      background:#edf2fb;
+      background:#d1d5db;
       color:#334155;
       font-weight:900;
       cursor:pointer;
       flex-shrink:0;
-      }
-      
-.jp-toggle.active {
-  background: linear-gradient(180deg, #4f7df3, #3567e8);
-  color: white;
-}
+    }
 
     .jp-toggle.active{
-      background:linear-gradient(180deg, var(--blue1), var(--blue2));
+      background:linear-gradient(180deg,var(--blue1),var(--blue2));
       color:#fff;
     }
 
@@ -255,18 +258,19 @@
     }
 
     .memory-btn{
-      background:linear-gradient(180deg, var(--red1), var(--red2));
+      background:linear-gradient(180deg,var(--red1),var(--red2));
     }
 
     .review-btn{
-      background:linear-gradient(180deg, var(--gray1), var(--gray2));
+      background:linear-gradient(180deg,var(--gray1),var(--gray2));
     }
 
     .back-btn{
-      background:linear-gradient(180deg, var(--orange), var(--orange2));
+      background:linear-gradient(180deg,var(--orange1),var(--orange2));
     }
 
-    @media (max-width: 640px){
+    /* iPhone優先の安定設定 */
+    @media (max-width: 480px){
       body{
         padding:8px;
       }
@@ -281,8 +285,8 @@
         gap:8px;
       }
 
-      .field select,
       .field input,
+      .field select,
       .start-btn{
         height:46px;
         border-radius:14px;
@@ -302,12 +306,21 @@
       .side-btn{
         min-height:46vh;
         border-radius:22px;
+        font-size:15px;
       }
 
       .card-box{
         min-height:46vh;
         border-radius:22px;
         padding:16px 10px 66px;
+      }
+
+      .word{
+        font-size:30px !important;
+      }
+
+      .meaning{
+        font-size:24px;
       }
 
       .speaker{
@@ -331,6 +344,17 @@
       .bottom-btn{
         height:56px;
         border-radius:16px;
+      }
+    }
+
+    /* 中くらいのスマホ */
+    @media (min-width: 481px) and (max-width: 767px){
+      .word{
+        font-size:40px;
+      }
+
+      .meaning{
+        font-size:28px;
       }
     }
   </style>
@@ -410,7 +434,7 @@
       };
     */
     const DATA = {
-       A: [
+     A: [
     { word: "a", meaning: "1つの" },
     { word: "ability", meaning: "能力" },
     { word: "able", meaning: "できる" },
@@ -7068,20 +7092,6 @@
       i = 0;
     }
 
-   function fitWordToOneLine(){
-  const el = wordEl;
-
-  el.style.fontSize = "60px";
-
-  let size = 60;
-  const minSize = 12;
-
-  while (size > minSize && el.scrollWidth > el.clientWidth) {
-    size -= 1;
-    el.style.fontSize = size + "px";
-  }
-}
-
     function show(){
       if (!list.length) {
         if (memoryList.length === 0) {
@@ -7097,7 +7107,6 @@
         meanEl.style.display = showJP ? "block" : "none";
         toggleJPBtn.classList.toggle("active", showJP);
         updateMemoryCount();
-        fitWordToOneLine();
         return;
       }
 
@@ -7106,12 +7115,13 @@
       meanEl.style.display = showJP ? "block" : "none";
       toggleJPBtn.classList.toggle("active", showJP);
 
-      metaEl.textContent = (i + 1) + " / " + list.length;
-      if(i === list.length - 1){
-  metaEl.textContent = "終了！お疲れ様です";
-}
+      if (i === list.length - 1) {
+        metaEl.textContent = "終了！お疲れ様です";
+      } else {
+        metaEl.textContent = (i + 1) + " / " + list.length;
+      }
+
       updateMemoryCount();
-      requestAnimationFrame(fitWordToOneLine);
     }
 
     function stopFlash(){
@@ -7132,6 +7142,7 @@
       timer = setInterval(() => {
         if (i >= list.length - 1) {
           stopFlash();
+          show();
           return;
         }
         history.push(i);
@@ -7218,9 +7229,6 @@
 
     show();
     updateMemoryCount();
-    window.addEventListener("resize", () => {
-  requestAnimationFrame(fitWordToOneLine);
-});
   </script>
 </body>
 </html>
