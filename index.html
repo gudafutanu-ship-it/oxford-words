@@ -99,10 +99,9 @@ input,select{
   box-sizing:border-box;
 }
 .word{
-  font-size:50px;
-  font-weight:bold;
-  line-height:1.05;
-  word-break:break-word;
+  font-size: clamp(28px, 6vw, 64px);
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 .mean{
   font-size:24px;
