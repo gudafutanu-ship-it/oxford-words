@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="format-detection" content="telephone=no">
 
-  <!-- アイコン -->
+  <!-- iPhoneでbook.pngを使う -->
   <link rel="apple-touch-icon" href="book.png">
   <link rel="icon" type="image/png" href="book.png">
 
@@ -29,7 +29,7 @@
       --orange1:#f6b331;
       --orange2:#ee9b0f;
       --shadow:0 10px 28px rgba(15,23,42,.08);
-      --shadow-strong:0 12px 30px rgba(15,23,42,.16);
+      --shadow-strong:0 10px 20px rgba(0,0,0,.14);
     }
 
     *{
@@ -70,7 +70,7 @@
 
     .top-grid{
       display:grid;
-      grid-template-columns:90px 96px 96px 1fr 1fr;
+      grid-template-columns:90px 100px 100px 1fr 1fr;
       gap:10px;
       align-items:end;
       margin-bottom:12px;
@@ -115,7 +115,7 @@
 
     .top-btn{
       width:100%;
-      height:58px;
+      height:56px;
       border:none;
       border-radius:18px;
       color:#fff;
@@ -124,8 +124,9 @@
       touch-action:manipulation;
       min-width:82px;
       font-size:18px;
-      box-shadow:0 6px 16px rgba(0,0,0,.10);
-      transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      transition:transform .14s ease, box-shadow .14s ease, filter .14s ease;
+      box-shadow:0 6px 14px rgba(0,0,0,.10);
+      overflow:hidden;
     }
 
     .start-btn{
@@ -158,8 +159,8 @@
       justify-content:center;
       touch-action:manipulation;
       font-size:19px;
-      box-shadow:0 8px 18px rgba(0,0,0,.12);
-      transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      transition:transform .14s ease, box-shadow .14s ease, filter .14s ease;
+      box-shadow:0 8px 18px rgba(0,0,0,.10);
     }
 
     .stop-btn{
@@ -188,19 +189,24 @@
       align-items:center;
       justify-content:center;
       text-align:center;
-      padding:20px 18px 86px;
+      padding:20px 18px 78px;
       overflow:hidden;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
     }
 
-    .card-inner{
+    .card-content{
       width:100%;
-      transition:opacity .26s ease, transform .26s ease;
+      animation:cardFade .32s ease;
     }
 
-    .card-inner.animating{
-      opacity:0;
-      transform:translateY(6px);
+    @keyframes cardFade{
+      from{
+        opacity:0;
+        transform:translateY(8px) scale(.985);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
     }
 
     .word{
@@ -217,6 +223,7 @@
       text-align:center;
       font-size:54px;
       letter-spacing:-0.03em;
+      padding-bottom:6px;
     }
 
     .meaning{
@@ -231,8 +238,8 @@
       position:absolute;
       left:14px;
       bottom:14px;
-      width:70px;
-      height:70px;
+      width:66px;
+      height:66px;
       border:none;
       border-radius:999px;
       background:#fff6dd;
@@ -242,8 +249,8 @@
       align-items:center;
       justify-content:center;
       touch-action:manipulation;
-      font-size:30px;
-      transition:transform .16s ease, box-shadow .16s ease;
+      font-size:28px;
+      transition:transform .14s ease, box-shadow .14s ease;
     }
 
     .speaker:hover{
@@ -277,8 +284,8 @@
       flex-shrink:0;
       touch-action:manipulation;
       font-size:18px;
-      box-shadow:0 6px 16px rgba(0,0,0,.10);
-      transition:transform .12s ease, box-shadow .12s ease;
+      transition:transform .14s ease, box-shadow .14s ease;
+      box-shadow:0 6px 14px rgba(0,0,0,.10);
     }
 
     .jp-toggle.active{
@@ -302,8 +309,8 @@
       cursor:pointer;
       touch-action:manipulation;
       font-size:18px;
+      transition:transform .14s ease, box-shadow .14s ease, filter .14s ease;
       box-shadow:0 8px 18px rgba(0,0,0,.10);
-      transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
     }
 
     .memory-btn{
@@ -324,7 +331,7 @@
     .jp-toggle:active,
     .speaker:active{
       transform:scale(0.96);
-      box-shadow:0 4px 10px rgba(0,0,0,.10);
+      box-shadow:0 4px 10px rgba(0,0,0,.12);
     }
 
     @media (max-width: 480px){
@@ -337,9 +344,10 @@
         border-radius:24px;
       }
 
+      /* 再開ボタンが切れないようにここを調整 */
       .top-grid{
-        grid-template-columns:74px 82px 82px 1fr 1fr;
-        gap:8px;
+        grid-template-columns:68px 76px 76px 1fr 1fr;
+        gap:6px;
       }
 
       .field input,
@@ -352,8 +360,10 @@
       .top-btn{
         height:58px;
         border-radius:16px;
-        min-width:70px;
-        font-size:17px;
+        min-width:0;
+        font-size:16px;
+        padding:0 6px;
+        overflow:hidden;
       }
 
       .main-grid{
@@ -370,7 +380,7 @@
       .card-box{
         min-height:46vh;
         border-radius:22px;
-        padding:16px 10px 76px;
+        padding:16px 10px 72px;
       }
 
       .word{
@@ -382,11 +392,11 @@
       }
 
       .speaker{
-        width:60px;
-        height:60px;
+        width:58px;
+        height:58px;
         left:10px;
         bottom:10px;
-        font-size:26px;
+        font-size:24px;
       }
 
       .below-text{
@@ -454,7 +464,7 @@
 
         <div class="center-col">
           <div class="card-box">
-            <div class="card-inner" id="cardInner">
+            <div class="card-content" id="cardContent">
               <div class="word" id="word">-</div>
               <div class="meaning" id="meaning">-</div>
             </div>
@@ -483,9 +493,6 @@
   </div>
 
   <script>
-    /*
-      ここに単語データを入れてください
-    */
     const DATA = {
        A: [
     { word: "a", meaning: "1つの" },
@@ -7082,12 +7089,12 @@
     const backBtn = document.getElementById("back");
     const toggleJPBtn = document.getElementById("toggleJP");
 
-    const cardInnerEl = document.getElementById("cardInner");
     const wordEl = document.getElementById("word");
     const meanEl = document.getElementById("meaning");
     const metaEl = document.getElementById("meta");
     const memoryCountEl = document.getElementById("memoryCount");
     const cardBoxEl = document.querySelector(".card-box");
+    const cardContentEl = document.getElementById("cardContent");
 
     function saveProgress(){
       const data = {
@@ -7108,6 +7115,7 @@
 
       try{
         const data = JSON.parse(saved);
+
         if (data.rank) rankEl.value = data.rank;
         if (data.initial) initialEl.value = data.initial;
         if (data.showJP !== undefined) showJP = data.showJP;
@@ -7195,7 +7203,13 @@
       }
     }
 
-    function renderCardContent(){
+    function restartCardAnimation(){
+      cardContentEl.style.animation = "none";
+      void cardContentEl.offsetWidth;
+      cardContentEl.style.animation = "cardFade .32s ease";
+    }
+
+    function show(){
       if (!list.length) {
         if (memoryList.length === 0) {
           wordEl.textContent = "OK！";
@@ -7206,38 +7220,31 @@
           meanEl.textContent = "対象単語がありません";
           metaEl.textContent = "0件";
         }
-      } else {
-        wordEl.textContent = list[i].word;
-        meanEl.textContent = list[i].meaning;
 
-        if (i === list.length - 1) {
-          metaEl.textContent = "終了！お疲れ様です";
-        } else {
-          metaEl.textContent = (i + 1) + " / " + list.length;
-        }
+        meanEl.style.display = showJP ? "block" : "none";
+        toggleJPBtn.classList.toggle("active", showJP);
+        updateMemoryCount();
+        restartCardAnimation();
+        requestAnimationFrame(fitWordToOneLine);
+        saveProgress();
+        return;
       }
 
+      wordEl.textContent = list[i].word;
+      meanEl.textContent = list[i].meaning;
       meanEl.style.display = showJP ? "block" : "none";
       toggleJPBtn.classList.toggle("active", showJP);
+
+      if (i === list.length - 1) {
+        metaEl.textContent = "終了！お疲れ様です";
+      } else {
+        metaEl.textContent = (i + 1) + " / " + list.length;
+      }
+
       updateMemoryCount();
+      restartCardAnimation();
       requestAnimationFrame(fitWordToOneLine);
       saveProgress();
-    }
-
-    function animateAndShow(){
-      cardInnerEl.classList.add("animating");
-      setTimeout(() => {
-        renderCardContent();
-        cardInnerEl.classList.remove("animating");
-      }, 120);
-    }
-
-    function show(skipAnimation = false){
-      if (skipAnimation) {
-        renderCardContent();
-      } else {
-        animateAndShow();
-      }
     }
 
     function stopFlash(){
@@ -7376,7 +7383,7 @@
       loadList();
     }
 
-    show(true);
+    show();
     updateMemoryCount();
   </script>
 </body>
