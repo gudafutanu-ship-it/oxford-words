@@ -7279,12 +7279,25 @@
     }
 
     function resumeStudy(){
-      if (!list.length) {
-        startStudy();
-        return;
-      }
-      startFlashFromCurrent();
-    }
+  // listが空なら必ず再生成
+  if (!list || list.length === 0) {
+    loadList();
+  }
+
+  // それでも空ならスタート扱い
+  if (!list.length) {
+    startStudy();
+    return;
+  }
+
+  // インデックスが範囲外のとき補正
+  if (i >= list.length) {
+    i = 0;
+  }
+
+  show();
+  startFlashFromCurrent();
+}
 
     function nextWord(){
       stopFlash();
