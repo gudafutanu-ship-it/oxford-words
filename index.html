@@ -6,8 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="format-detection" content="telephone=no">
   <title>Oxford5000</title>
- <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-512.png">
+
   <style>
     :root{
       --bg:#f4f6fb;
@@ -52,7 +51,6 @@
     .wrap{
       max-width:920px;
       margin:0 auto;
-      max-width:100%;
       overflow:hidden;
     }
 
@@ -62,13 +60,12 @@
       border-radius:28px;
       box-shadow:var(--shadow);
       padding:14px;
-      max-width:100%;
       overflow:hidden;
     }
 
     .top-grid{
       display:grid;
-      grid-template-columns:90px 120px 90px 34px 1fr;
+      grid-template-columns:90px 120px 90px 34px 1fr 1fr;
       gap:10px;
       align-items:end;
       margin-bottom:12px;
@@ -83,7 +80,7 @@
 
     .field input,
     .field select,
-    .start-btn,
+    .top-btn,
     .bottom-btn,
     .side-btn,
     .jp-toggle,
@@ -117,16 +114,23 @@
       white-space:nowrap;
     }
 
-    .start-btn{
+    .top-btn{
       width:100%;
       height:48px;
       border:none;
       border-radius:16px;
-      background:linear-gradient(180deg,var(--red1),var(--red2));
       color:#fff;
       font-weight:900;
       cursor:pointer;
       touch-action:manipulation;
+    }
+
+    .start-btn{
+      background:linear-gradient(180deg,var(--red1),var(--red2));
+    }
+
+    .resume-btn{
+      background:linear-gradient(180deg,var(--blue1),var(--blue2));
     }
 
     .main-grid{
@@ -297,13 +301,13 @@
       }
 
       .top-grid{
-        grid-template-columns:74px 92px 74px 24px 1fr;
+        grid-template-columns:74px 92px 74px 24px 1fr 1fr;
         gap:8px;
       }
 
       .field input,
       .field select,
-      .start-btn{
+      .top-btn{
         height:46px;
         border-radius:14px;
         padding:0 10px;
@@ -402,7 +406,8 @@
 
         <div class="sec-unit">秒</div>
 
-        <button class="start-btn" id="start">スタート</button>
+        <button class="top-btn start-btn" id="start">スタート</button>
+        <button class="top-btn resume-btn" id="resume">再開</button>
       </div>
 
       <div class="main-grid">
@@ -437,6 +442,17 @@
   </div>
 
   <script>
+    /*
+      ここに単語データを入れてください
+      例:
+      const DATA = {
+        A: [{ word: "apple", meaning: "りんご" }],
+        B: [],
+        C: [],
+        D: [],
+        E: []
+      };
+    */
     const DATA = {
       A: [
     { word: "a", meaning: "1つの" },
@@ -7023,6 +7039,7 @@
     const secEl = document.getElementById("sec");
 
     const startBtn = document.getElementById("start");
+    const resumeBtn = document.getElementById("resume");
     const stopBtn = document.getElementById("stop");
     const nextBtn = document.getElementById("next");
     const speakBtn = document.getElementById("speak");
@@ -7037,6 +7054,38 @@
     const metaEl = document.getElementById("meta");
     const memoryCountEl = document.getElementById("memoryCount");
     const cardBoxEl = document.querySelector(".card-box");
+
+    function saveProgress(){
+      const data = {
+        index: i,
+        memory: memoryList,
+        rank: rankEl.value,
+        initial: initialEl.value,
+        showJP: showJP,
+        list: list,
+        history: history
+      };
+      localStorage.setItem("oxford_progress", JSON.stringify(data));
+    }
+
+    function loadProgress(){
+      const saved = localStorage.getItem("oxford_progress");
+      if (!saved) return;
+
+      try{
+        const data = JSON.parse(saved);
+
+        if (data.rank) rankEl.value = data.rank;
+        if (data.initial) initialEl.value = data.initial;
+        if (data.showJP !== undefined) showJP = data.showJP;
+        if (Array.isArray(data.memory)) memoryList = data.memory;
+        if (Array.isArray(data.list)) list = data.list;
+        if (Array.isArray(data.history)) history = data.history;
+        if (typeof data.index === "number") i = data.index;
+      }catch(e){
+        console.log("読み込みエラー");
+      }
+    }
 
     function updateMemoryCount(){
       memoryCountEl.textContent = "記憶カード総数：" + memoryList.length + "枚";
@@ -7095,13 +7144,14 @@
       });
 
       i = 0;
+      history = [];
     }
 
     function fitWordToOneLine(){
       if (!wordEl || !cardBoxEl) return;
 
       let size = window.innerWidth <= 480 ? 22 : (window.innerWidth <= 767 ? 34 : 54);
-      const minSize = 10;
+      const minSize = 8;
       const availableWidth = cardBoxEl.clientWidth - 24;
 
       wordEl.style.fontSize = size + "px";
@@ -7128,6 +7178,7 @@
         toggleJPBtn.classList.toggle("active", showJP);
         updateMemoryCount();
         requestAnimationFrame(fitWordToOneLine);
+        saveProgress();
         return;
       }
 
@@ -7144,6 +7195,7 @@
 
       updateMemoryCount();
       requestAnimationFrame(fitWordToOneLine);
+      saveProgress();
     }
 
     function stopFlash(){
@@ -7153,10 +7205,8 @@
       }
     }
 
-    function startStudy(){
+    function startFlashFromCurrent(){
       stopFlash();
-      loadList();
-      show();
 
       const sec = parseFloat(secEl.value);
       if (!isFinite(sec) || sec <= 0 || !list.length) return;
@@ -7171,6 +7221,20 @@
         i++;
         show();
       }, sec * 1000);
+    }
+
+    function startStudy(){
+      loadList();
+      show();
+      startFlashFromCurrent();
+    }
+
+    function resumeStudy(){
+      if (!list.length) {
+        startStudy();
+        return;
+      }
+      startFlashFromCurrent();
     }
 
     function nextWord(){
@@ -7200,6 +7264,7 @@
       }
 
       updateMemoryCount();
+      saveProgress();
     }
 
     function reviewWords(){
@@ -7208,12 +7273,15 @@
       if (!memoryList.length) {
         list = [];
         show();
+        saveProgress();
         return;
       }
 
       list = [...memoryList];
       i = 0;
+      history = [];
       show();
+      saveProgress();
     }
 
     function goBack(){
@@ -7222,15 +7290,18 @@
       if (history.length) {
         i = history.pop();
         show();
+        saveProgress();
       }
     }
 
     function toggleJapanese(){
       showJP = !showJP;
       show();
+      saveProgress();
     }
 
     startBtn.addEventListener("click", startStudy);
+    resumeBtn.addEventListener("click", resumeStudy);
     stopBtn.addEventListener("click", stopFlash);
     nextBtn.addEventListener("click", nextWord);
     speakBtn.addEventListener("click", speakCurrent);
@@ -7269,6 +7340,12 @@
     window.addEventListener("load", () => {
       requestAnimationFrame(fitWordToOneLine);
     });
+
+    loadProgress();
+
+    if (!list.length) {
+      loadList();
+    }
 
     show();
     updateMemoryCount();
