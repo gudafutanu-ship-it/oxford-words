@@ -6,7 +6,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="format-detection" content="telephone=no">
 
-  <!-- iPhoneでbook.pngを使う -->
   <link rel="apple-touch-icon" href="book.png">
   <link rel="icon" type="image/png" href="book.png">
 
@@ -89,7 +88,8 @@
     .bottom-btn,
     .side-btn,
     .jp-toggle,
-    .speaker{
+    .speaker,
+    .voice-chip{
       font-size:16px;
     }
 
@@ -144,30 +144,55 @@
       align-items:stretch;
     }
 
+    .left-col{
+      display:grid;
+      grid-template-rows:1fr 96px;
+      gap:10px;
+    }
+
     .side-btn{
-      min-height:52vh;
       border:none;
       border-radius:26px;
       color:#fff;
       font-weight:900;
       cursor:pointer;
-      writing-mode:vertical-rl;
-      text-orientation:upright;
-      letter-spacing:2px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
       touch-action:manipulation;
       font-size:19px;
       transition:transform .14s ease, box-shadow .14s ease, filter .14s ease;
       box-shadow:0 8px 18px rgba(0,0,0,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
     }
 
     .stop-btn{
+      min-height:52vh;
+      writing-mode:vertical-rl;
+      text-orientation:upright;
+      letter-spacing:2px;
       background:linear-gradient(180deg,var(--green1),var(--green2));
     }
 
+    .flash-read-btn{
+      writing-mode:horizontal-tb;
+      text-orientation:mixed;
+      letter-spacing:0;
+      font-size:16px;
+      line-height:1.15;
+      padding:6px;
+      background:linear-gradient(180deg,var(--gray1),var(--gray2));
+    }
+
+    .flash-read-btn.active{
+      background:linear-gradient(180deg,var(--blue1),var(--blue2));
+    }
+
     .next-btn{
+      min-height:52vh;
+      writing-mode:vertical-rl;
+      text-orientation:upright;
+      letter-spacing:2px;
       background:linear-gradient(180deg,var(--blue1),var(--blue2));
     }
 
@@ -189,7 +214,7 @@
       align-items:center;
       justify-content:center;
       text-align:center;
-      padding:20px 18px 78px;
+      padding:20px 18px 86px;
       overflow:hidden;
     }
 
@@ -234,10 +259,17 @@
       word-break:break-word;
     }
 
-    .speaker{
+    .audio-tools{
       position:absolute;
       left:14px;
       bottom:14px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      max-width:calc(100% - 28px);
+    }
+
+    .speaker{
       width:66px;
       height:66px;
       border:none;
@@ -251,10 +283,29 @@
       touch-action:manipulation;
       font-size:28px;
       transition:transform .14s ease, box-shadow .14s ease, opacity .14s ease;
+      flex:0 0 auto;
     }
 
     .speaker:hover{
       transform:translateY(-2px);
+    }
+
+    .voice-chip{
+      border:none;
+      border-radius:999px;
+      background:rgba(255,255,255,.92);
+      color:#475569;
+      box-shadow:0 6px 14px rgba(0,0,0,.10);
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.1;
+      cursor:pointer;
+      max-width:180px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      flex:0 1 auto;
     }
 
     .speaker.disabled{
@@ -334,7 +385,8 @@
     .bottom-btn:active,
     .side-btn:active,
     .jp-toggle:active,
-    .speaker:active{
+    .speaker:active,
+    .voice-chip:active{
       transform:scale(0.96);
       box-shadow:0 4px 10px rgba(0,0,0,.12);
     }
@@ -375,16 +427,30 @@
         gap:8px;
       }
 
+      .left-col{
+        grid-template-rows:1fr 82px;
+        gap:8px;
+      }
+
       .side-btn{
+        font-size:17px;
+      }
+
+      .flash-read-btn{
+        font-size:14px;
+        padding:4px;
+      }
+
+      .stop-btn,
+      .next-btn{
         min-height:46vh;
         border-radius:22px;
-        font-size:17px;
       }
 
       .card-box{
         min-height:46vh;
         border-radius:22px;
-        padding:16px 10px 72px;
+        padding:16px 10px 76px;
       }
 
       .word{
@@ -395,12 +461,22 @@
         font-size:24px;
       }
 
+      .audio-tools{
+        left:10px;
+        bottom:10px;
+        gap:6px;
+      }
+
       .speaker{
         width:58px;
         height:58px;
-        left:10px;
-        bottom:10px;
         font-size:24px;
+      }
+
+      .voice-chip{
+        max-width:120px;
+        font-size:11px;
+        padding:7px 10px;
       }
 
       .below-text{
@@ -464,7 +540,10 @@
       </div>
 
       <div class="main-grid">
-        <button class="side-btn stop-btn" id="stop">ストップ</button>
+        <div class="left-col">
+          <button class="side-btn stop-btn" id="stop">ストップ</button>
+          <button class="side-btn flash-read-btn" id="flashRead">F発音確認</button>
+        </div>
 
         <div class="center-col">
           <div class="card-box">
@@ -472,7 +551,11 @@
               <div class="word" id="word">-</div>
               <div class="meaning" id="meaning">-</div>
             </div>
-            <button class="speaker" id="speak" aria-label="聞く">🔈</button>
+
+            <div class="audio-tools">
+              <button class="speaker" id="speak" aria-label="聞く">🔈</button>
+              <button class="voice-chip" id="voiceChip" aria-label="音声切替">voice</button>
+            </div>
           </div>
 
           <div class="below-card">
@@ -497,8 +580,11 @@
   </div>
 
   <script>
+    /*
+      ここに今までの単語データをそのまま入れてください
+    */
     const DATA = {
-     A: [
+      A: [
     { word: "a", meaning: "1つの" },
     { word: "ability", meaning: "能力" },
     { word: "able", meaning: "できる" },
@@ -8166,6 +8252,9 @@
     let history = [];
     let showJP = true;
     let voices = [];
+    let englishVoices = [];
+    let selectedVoiceIndex = 0;
+    let flashReadMode = false;
 
     const rankEl = document.getElementById("rank");
     const initialEl = document.getElementById("initial");
@@ -8176,6 +8265,8 @@
     const stopBtn = document.getElementById("stop");
     const nextBtn = document.getElementById("next");
     const speakBtn = document.getElementById("speak");
+    const voiceChipBtn = document.getElementById("voiceChip");
+    const flashReadBtn = document.getElementById("flashRead");
 
     const memoryBtn = document.getElementById("memory");
     const reviewBtn = document.getElementById("review");
@@ -8197,7 +8288,9 @@
         initial: initialEl.value,
         showJP: showJP,
         list: list,
-        history: history
+        history: history,
+        flashReadMode: flashReadMode,
+        selectedVoiceIndex: selectedVoiceIndex
       };
       localStorage.setItem("oxford_progress", JSON.stringify(data));
     }
@@ -8216,6 +8309,8 @@
         if (Array.isArray(data.list)) list = data.list;
         if (Array.isArray(data.history)) history = data.history;
         if (typeof data.index === "number") i = data.index;
+        if (typeof data.flashReadMode === "boolean") flashReadMode = data.flashReadMode;
+        if (typeof data.selectedVoiceIndex === "number") selectedVoiceIndex = data.selectedVoiceIndex;
       }catch(e){
         console.log("読み込みエラー");
       }
@@ -8226,45 +8321,84 @@
     }
 
     function loadVoices(){
-      if ("speechSynthesis" in window) {
-        voices = speechSynthesis.getVoices();
-      }
-    }
+      if (!("speechSynthesis" in window)) return;
 
-    function pickVoice(){
-      const preferred = [
+      voices = speechSynthesis.getVoices();
+
+      const preferredNames = [
+        "Daniel",
         "Samantha",
         "Karen",
-        "Daniel",
-        "Google US English",
+        "Google UK English Male",
         "Google UK English Female",
-        "Google UK English Male"
+        "Google US English"
       ];
 
-      for (const name of preferred) {
-        const v = voices.find(x => x.name === name);
-        if (v) return v;
+      const allEnglish = voices.filter(v => /^en/i.test(v.lang));
+
+      const preferred = [];
+      preferredNames.forEach(name => {
+        const hit = allEnglish.find(v => v.name === name);
+        if (hit && !preferred.some(p => p.name === hit.name && p.lang === hit.lang)) {
+          preferred.push(hit);
+        }
+      });
+
+      allEnglish.forEach(v => {
+        if (!preferred.some(p => p.name === v.name && p.lang === v.lang)) {
+          preferred.push(v);
+        }
+      });
+
+      englishVoices = preferred;
+
+      if (selectedVoiceIndex >= englishVoices.length) {
+        selectedVoiceIndex = 0;
       }
 
-      return voices.find(v => /^en/i.test(v.lang)) || null;
+      updateVoiceChip();
+    }
+
+    function getCurrentVoice(){
+      if (!englishVoices.length) return null;
+      return englishVoices[selectedVoiceIndex] || englishVoices[0] || null;
+    }
+
+    function updateVoiceChip(){
+      const v = getCurrentVoice();
+      if (!v) {
+        voiceChipBtn.textContent = "default";
+        return;
+      }
+      voiceChipBtn.textContent = v.name;
+    }
+
+    function cycleVoice(){
+      if (!englishVoices.length) return;
+      selectedVoiceIndex = (selectedVoiceIndex + 1) % englishVoices.length;
+      updateVoiceChip();
+      saveProgress();
+    }
+
+    function updateFlashReadButton(){
+      flashReadBtn.classList.toggle("active", flashReadMode);
     }
 
     function updateSpeakerState(){
-      const sec = parseFloat(secEl.value);
-      if (sec >= 2 && list.length) {
+      if (list.length) {
         speakBtn.classList.remove("disabled");
       } else {
         speakBtn.classList.add("disabled");
       }
     }
 
-    function speakCurrent(){
-      const sec = parseFloat(secEl.value);
-      if (sec < 2) return;
-      if (!list.length || !("speechSynthesis" in window)) return;
+    function speakWord(text){
+      if (!text || !("speechSynthesis" in window)) return;
 
-      const ut = new SpeechSynthesisUtterance(list[i].word);
-      const voice = pickVoice();
+      speechSynthesis.cancel();
+
+      const ut = new SpeechSynthesisUtterance(text);
+      const voice = getCurrentVoice();
 
       if (voice) {
         ut.voice = voice;
@@ -8274,8 +8408,22 @@
       }
 
       ut.rate = 0.92;
-      speechSynthesis.cancel();
+      ut.pitch = 1.0;
       speechSynthesis.speak(ut);
+    }
+
+    function speakCurrent(){
+      if (!list.length) return;
+      speakWord(list[i].word);
+    }
+
+    function speakCurrentForFlash(){
+      const sec = parseFloat(secEl.value);
+      if (!flashReadMode) return;
+      if (!isFinite(sec) || sec < 2) return;
+      if (!list.length) return;
+
+      speakWord(list[i].word);
     }
 
     function loadList(){
@@ -8313,7 +8461,7 @@
       cardContentEl.style.animation = "cardFade .32s ease";
     }
 
-    function show(){
+    function show(autoSpeakForFlash = false){
       if (!list.length) {
         if (memoryList.length === 0) {
           wordEl.textContent = "OK！";
@@ -8329,6 +8477,8 @@
         toggleJPBtn.classList.toggle("active", showJP);
         updateMemoryCount();
         updateSpeakerState();
+        updateFlashReadButton();
+        updateVoiceChip();
         restartCardAnimation();
         requestAnimationFrame(fitWordToOneLine);
         saveProgress();
@@ -8348,15 +8498,26 @@
 
       updateMemoryCount();
       updateSpeakerState();
+      updateFlashReadButton();
+      updateVoiceChip();
       restartCardAnimation();
       requestAnimationFrame(fitWordToOneLine);
       saveProgress();
+
+      if (autoSpeakForFlash) {
+        setTimeout(() => {
+          speakCurrentForFlash();
+        }, 120);
+      }
     }
 
     function stopFlash(){
       if (timer) {
         clearInterval(timer);
         timer = null;
+      }
+      if ("speechSynthesis" in window) {
+        speechSynthesis.cancel();
       }
     }
 
@@ -8366,21 +8527,27 @@
       const sec = parseFloat(secEl.value);
       if (!isFinite(sec) || sec <= 0 || !list.length) return;
 
+      if (flashReadMode && sec >= 2) {
+        setTimeout(() => {
+          speakCurrentForFlash();
+        }, 120);
+      }
+
       timer = setInterval(() => {
         if (i >= list.length - 1) {
           stopFlash();
-          show();
+          show(false);
           return;
         }
         history.push(i);
         i++;
-        show();
+        show(true);
       }, sec * 1000);
     }
 
     function startStudy(){
       loadList();
-      show();
+      show(false);
       startFlashFromCurrent();
     }
 
@@ -8398,7 +8565,7 @@
         i = 0;
       }
 
-      show();
+      show(false);
       startFlashFromCurrent();
     }
 
@@ -8407,7 +8574,7 @@
 
       if (!list.length) {
         loadList();
-        show();
+        show(false);
         return;
       }
 
@@ -8417,7 +8584,7 @@
         i++;
       }
 
-      show();
+      show(false);
     }
 
     function addMemory(){
@@ -8437,7 +8604,7 @@
 
       if (!memoryList.length) {
         list = [];
-        show();
+        show(false);
         saveProgress();
         return;
       }
@@ -8445,7 +8612,7 @@
       list = [...memoryList];
       i = 0;
       history = [];
-      show();
+      show(false);
       saveProgress();
     }
 
@@ -8454,14 +8621,20 @@
 
       if (history.length) {
         i = history.pop();
-        show();
+        show(false);
         saveProgress();
       }
     }
 
     function toggleJapanese(){
       showJP = !showJP;
-      show();
+      show(false);
+      saveProgress();
+    }
+
+    function toggleFlashReadMode(){
+      flashReadMode = !flashReadMode;
+      updateFlashReadButton();
       saveProgress();
     }
 
@@ -8470,13 +8643,18 @@
     stopBtn.addEventListener("click", stopFlash);
     nextBtn.addEventListener("click", nextWord);
     speakBtn.addEventListener("click", speakCurrent);
+    voiceChipBtn.addEventListener("click", cycleVoice);
+    flashReadBtn.addEventListener("click", toggleFlashReadMode);
 
     memoryBtn.addEventListener("click", addMemory);
     reviewBtn.addEventListener("click", reviewWords);
     backBtn.addEventListener("click", goBack);
     toggleJPBtn.addEventListener("click", toggleJapanese);
 
-    secEl.addEventListener("input", updateSpeakerState);
+    secEl.addEventListener("input", () => {
+      updateSpeakerState();
+      updateFlashReadButton();
+    });
 
     initialEl.addEventListener("input", () => {
       initialEl.value = initialEl.value.replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 1);
@@ -8501,9 +8679,11 @@
       loadList();
     }
 
-    show();
+    show(false);
     updateMemoryCount();
     updateSpeakerState();
+    updateFlashReadButton();
+    updateVoiceChip();
   </script>
 </body>
 </html>
