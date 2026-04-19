@@ -250,11 +250,16 @@
       justify-content:center;
       touch-action:manipulation;
       font-size:28px;
-      transition:transform .14s ease, box-shadow .14s ease;
+      transition:transform .14s ease, box-shadow .14s ease, opacity .14s ease;
     }
 
     .speaker:hover{
       transform:translateY(-2px);
+    }
+
+    .speaker.disabled{
+      opacity:.4;
+      cursor:default;
     }
 
     .below-card{
@@ -344,7 +349,6 @@
         border-radius:24px;
       }
 
-      /* 再開ボタンが切れないようにここを調整 */
       .top-grid{
         grid-template-columns:68px 76px 76px 1fr 1fr;
         gap:6px;
@@ -494,7 +498,7 @@
 
   <script>
     const DATA = {
-       A: [
+     A: [
     { word: "a", meaning: "1つの" },
     { word: "ability", meaning: "能力" },
     { word: "able", meaning: "できる" },
@@ -608,7 +612,7 @@
     { word: "birthday", meaning: "誕生日" },
     { word: "bit", meaning: "少し" },
     { word: "black", meaning: "黒" },
-    { word: "ब्लame", meaning: "責める" },
+    { word: "blame", meaning: "責める" },
     { word: "blank", meaning: "空白の" },
     { word: "block", meaning: "区画" },
     { word: "blow", meaning: "吹く" },
@@ -1641,7 +1645,7 @@
     { word: "your", meaning: "あなたの" },
     { word: "yourself", meaning: "あなた自身" }
   ],
-  B:[
+     B: [
     { word: "ability", meaning: "能力" },
     { word: "able", meaning: "できる" },
     { word: "abroad", meaning: "海外へ" },
@@ -3708,7 +3712,7 @@
     { word: "youth", meaning: "若者" },
     { word: "zone", meaning: "区域" }
   ],
-  C: [
+     C: [
     { word: "abandon", meaning: "捨てる" },
     { word: "absolute", meaning: "完全な" },
     { word: "academic", meaning: "学問の" },
@@ -5358,7 +5362,7 @@
     { word: "youth", meaning: "若者" },
     { word: "zone", meaning: "地域" }
   ],
-  D: [
+      D: [
     { word: "abolish", meaning: "廃止する" },
     { word: "abortion", meaning: "妊娠中絶" },
     { word: "absence", meaning: "不在" },
@@ -8245,7 +8249,18 @@
       return voices.find(v => /^en/i.test(v.lang)) || null;
     }
 
+    function updateSpeakerState(){
+      const sec = parseFloat(secEl.value);
+      if (sec >= 2 && list.length) {
+        speakBtn.classList.remove("disabled");
+      } else {
+        speakBtn.classList.add("disabled");
+      }
+    }
+
     function speakCurrent(){
+      const sec = parseFloat(secEl.value);
+      if (sec < 2) return;
       if (!list.length || !("speechSynthesis" in window)) return;
 
       const ut = new SpeechSynthesisUtterance(list[i].word);
@@ -8313,6 +8328,7 @@
         meanEl.style.display = showJP ? "block" : "none";
         toggleJPBtn.classList.toggle("active", showJP);
         updateMemoryCount();
+        updateSpeakerState();
         restartCardAnimation();
         requestAnimationFrame(fitWordToOneLine);
         saveProgress();
@@ -8331,6 +8347,7 @@
       }
 
       updateMemoryCount();
+      updateSpeakerState();
       restartCardAnimation();
       requestAnimationFrame(fitWordToOneLine);
       saveProgress();
@@ -8368,25 +8385,22 @@
     }
 
     function resumeStudy(){
-  // listが空なら必ず再生成
-  if (!list || list.length === 0) {
-    loadList();
-  }
+      if (!list || list.length === 0) {
+        loadList();
+      }
 
-  // それでも空ならスタート扱い
-  if (!list.length) {
-    startStudy();
-    return;
-  }
+      if (!list.length) {
+        startStudy();
+        return;
+      }
 
-  // インデックスが範囲外のとき補正
-  if (i >= list.length) {
-    i = 0;
-  }
+      if (i >= list.length) {
+        i = 0;
+      }
 
-  show();
-  startFlashFromCurrent();
-}
+      show();
+      startFlashFromCurrent();
+    }
 
     function nextWord(){
       stopFlash();
@@ -8462,6 +8476,8 @@
     backBtn.addEventListener("click", goBack);
     toggleJPBtn.addEventListener("click", toggleJapanese);
 
+    secEl.addEventListener("input", updateSpeakerState);
+
     initialEl.addEventListener("input", () => {
       initialEl.value = initialEl.value.replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 1);
     });
@@ -8487,6 +8503,7 @@
 
     show();
     updateMemoryCount();
+    updateSpeakerState();
   </script>
 </body>
 </html>
